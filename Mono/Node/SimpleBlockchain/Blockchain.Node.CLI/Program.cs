@@ -26,7 +26,7 @@ namespace Blockchain.Node.CLI
                 services.AddMemoryCache();
                 services.AddSingleton<NodeConfiguration>();
                 services.AddSingleton<BlockchainLocalDataConnector>();
-                services.AddSingleton<CacheServiceProvider>();
+                services.AddSingleton<BlockchainCacheServiceProvider>();
                 services.AddHostedService<NodeCLI>();
                 
             });

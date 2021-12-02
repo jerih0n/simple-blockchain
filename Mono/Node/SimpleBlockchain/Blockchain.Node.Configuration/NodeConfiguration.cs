@@ -10,6 +10,8 @@ namespace Blockchain.Node.Configuration
         private const string BlockchainLocalFilePathName = "blockchain-local-file-path";
         private const string NodePortName = "node-port";
         private const string NodeLocalDbPathName = "node-local-database-path";
+        private const string PublicNodesDnsUrlName = "public-nodes-dns-url";
+        private const string NodeIpName = "node-ip";
 
         private readonly IConfiguration _configuration;
 
@@ -25,6 +27,8 @@ namespace Blockchain.Node.Configuration
                 BlockchainLocalFilePath = children.FirstOrDefault(x => x.Key == BlockchainLocalFilePathName).Value;
                 NodePort = int.Parse(children.FirstOrDefault(x => x.Key == NodePortName).Value);
                 NodeLocalDbPath = children.FirstOrDefault(x => x.Key == NodeLocalDbPathName).Value;
+                PublicNodesDnsUrl = children.FirstOrDefault(x => x.Key == PublicNodesDnsUrlName).Value;
+                NodeIp = children.FirstOrDefault(x => x.Key == NodeIpName).Value;
             }
             catch(Exception ex)
             {
@@ -37,5 +41,7 @@ namespace Blockchain.Node.Configuration
         public string BlockchainLocalFilePath { get; }
         public int NodePort { get; }
         public string NodeLocalDbPath { get; }
+        public string PublicNodesDnsUrl { get; }
+        public string NodeIp { get; }
     }
 }

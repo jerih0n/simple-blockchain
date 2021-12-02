@@ -13,9 +13,9 @@ namespace Blockchain.Node.Logic.LocalConnectors
 
         private readonly string _localDbFilePath;
         private readonly string _blockchainFile;
-        private CacheServiceProvider _cacheServiceProvider;
+        private BlockchainCacheServiceProvider _cacheServiceProvider;
 
-        public BlockchainLocalDataConnector(NodeConfiguration nodeConfiguration, CacheServiceProvider cacheServiceProvider)
+        public BlockchainLocalDataConnector(NodeConfiguration nodeConfiguration, BlockchainCacheServiceProvider cacheServiceProvider)
         {
             _localDbFilePath = nodeConfiguration.BlockchainLocalFilePath;
             _blockchainFile = $"{_localDbFilePath}/{BlockChainFileName}";

@@ -3,11 +3,11 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Blockchain.Node.Logic.Cache
 {
-    public class CacheServiceProvider
+    public class BlockchainCacheServiceProvider
     {
         private readonly IMemoryCache _memoryCache;
         private const string _blockchainCacheKey = "localBlockchain";
-        public CacheServiceProvider(IMemoryCache memoryCache)
+        public BlockchainCacheServiceProvider(IMemoryCache memoryCache)
         {
             _memoryCache = memoryCache;
         }
