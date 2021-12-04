@@ -11,15 +11,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CLI", "CLI", "{514F30B4-A15
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain.Node.CLI", "Blockchain.Node.CLI\Blockchain.Node.CLI.csproj", "{79A01924-A8F2-4603-B47B-A413544D44F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Utils", "Blockchain.Utils\Blockchain.Utils.csproj", "{BEB1CDA9-C3FF-4E17-8BBB-83302D0EAD54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain.Utils", "Blockchain.Utils\Blockchain.Utils.csproj", "{BEB1CDA9-C3FF-4E17-8BBB-83302D0EAD54}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logic", "Logic", "{1CB6DC12-D2A0-4D59-A97D-B55F4E2B02DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Node.Logic", "Blockchain.Node.Logic\Blockchain.Node.Logic.csproj", "{EC272D21-6329-4FA2-957F-4998EFB7DCA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain.Node.Logic", "Blockchain.Node.Logic\Blockchain.Node.Logic.csproj", "{EC272D21-6329-4FA2-957F-4998EFB7DCA6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{E6D93D7A-B40A-4705-8DB6-450432639776}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Node.Configuration", "Blockchain.Node.Configuration\Blockchain.Node.Configuration.csproj", "{6CF908DF-66B1-4E6E-8F44-CFB6FA58EB39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain.Node.Configuration", "Blockchain.Node.Configuration\Blockchain.Node.Configuration.csproj", "{6CF908DF-66B1-4E6E-8F44-CFB6FA58EB39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Cryptography", "Blockchain.Cryptography\Blockchain.Cryptography.csproj", "{88F0DEC2-76C6-440B-BA65-9A58DB69027F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{6CF908DF-66B1-4E6E-8F44-CFB6FA58EB39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CF908DF-66B1-4E6E-8F44-CFB6FA58EB39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CF908DF-66B1-4E6E-8F44-CFB6FA58EB39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88F0DEC2-76C6-440B-BA65-9A58DB69027F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88F0DEC2-76C6-440B-BA65-9A58DB69027F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88F0DEC2-76C6-440B-BA65-9A58DB69027F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88F0DEC2-76C6-440B-BA65-9A58DB69027F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{EC272D21-6329-4FA2-957F-4998EFB7DCA6} = {1CB6DC12-D2A0-4D59-A97D-B55F4E2B02DB}
 		{E6D93D7A-B40A-4705-8DB6-450432639776} = {DA5BCC96-39EC-4325-8383-DB4F79DE9878}
 		{6CF908DF-66B1-4E6E-8F44-CFB6FA58EB39} = {E6D93D7A-B40A-4705-8DB6-450432639776}
+		{88F0DEC2-76C6-440B-BA65-9A58DB69027F} = {93A93AB2-C8EF-4733-BFCB-6AE33F96F191}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0408B0A2-E2C8-4AD4-ADEF-3D825F9EA8EA}
