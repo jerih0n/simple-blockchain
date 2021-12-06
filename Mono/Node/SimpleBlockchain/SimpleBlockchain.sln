@@ -21,7 +21,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configurat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain.Node.Configuration", "Blockchain.Node.Configuration\Blockchain.Node.Configuration.csproj", "{6CF908DF-66B1-4E6E-8F44-CFB6FA58EB39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Cryptography", "Blockchain.Cryptography\Blockchain.Cryptography.csproj", "{88F0DEC2-76C6-440B-BA65-9A58DB69027F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain.Cryptography", "Blockchain.Cryptography\Blockchain.Cryptography.csproj", "{88F0DEC2-76C6-440B-BA65-9A58DB69027F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{4ADB895F-88E7-4DFF-AB3D-20CE6AD30079}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "temp_test", "temp_test\temp_test.csproj", "{98D67309-BD3C-43A2-8D65-AD329ABF3EEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +53,10 @@ Global
 		{88F0DEC2-76C6-440B-BA65-9A58DB69027F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88F0DEC2-76C6-440B-BA65-9A58DB69027F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88F0DEC2-76C6-440B-BA65-9A58DB69027F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98D67309-BD3C-43A2-8D65-AD329ABF3EEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98D67309-BD3C-43A2-8D65-AD329ABF3EEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98D67309-BD3C-43A2-8D65-AD329ABF3EEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98D67309-BD3C-43A2-8D65-AD329ABF3EEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +70,7 @@ Global
 		{E6D93D7A-B40A-4705-8DB6-450432639776} = {DA5BCC96-39EC-4325-8383-DB4F79DE9878}
 		{6CF908DF-66B1-4E6E-8F44-CFB6FA58EB39} = {E6D93D7A-B40A-4705-8DB6-450432639776}
 		{88F0DEC2-76C6-440B-BA65-9A58DB69027F} = {93A93AB2-C8EF-4733-BFCB-6AE33F96F191}
+		{98D67309-BD3C-43A2-8D65-AD329ABF3EEB} = {4ADB895F-88E7-4DFF-AB3D-20CE6AD30079}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0408B0A2-E2C8-4AD4-ADEF-3D825F9EA8EA}

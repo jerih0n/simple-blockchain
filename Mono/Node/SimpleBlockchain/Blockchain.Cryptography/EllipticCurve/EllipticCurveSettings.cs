@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Security.Cryptography;
 
 namespace Blockchain.Cryptography.EllipticCurve
 {
     public static class EllipticCurveSettings
     {
-        public static void A()
+        public static ECCurve GetElllipticCurve()
         {
-            var ecc = new ECCurve()
-            {
-                CurveType = ECCurve.ECCurveType.PrimeShortWeierstrass,
-                A = new byte[] { },
-            };
+            var ellipticCurve = ECCurve.NamedCurves.brainpoolP256r1;
+            return ellipticCurve;
         }
     }
 }
