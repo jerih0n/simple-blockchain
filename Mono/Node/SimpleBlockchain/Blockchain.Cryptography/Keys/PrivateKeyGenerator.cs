@@ -1,5 +1,4 @@
 ﻿using Blockchain.Cryptography.EllipticCurve;
-using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -9,7 +8,7 @@ namespace Blockchain.Cryptography.Keys
     {
         public static byte[] GeneratePrivateKey()
         {
-            ECDsaCng curveProtocol = new ECDsaCng(EllipticCurveSettings.GetElllipticCurve());
+            ECDsa curveProtocol = ECDsa.Create(EllipticCurveSettings.GetElllipticCurve());
 
             curveProtocol.GenerateKey(EllipticCurveSettings.GetElllipticCurve());
             var privateKey = curveProtocol.ExportECPrivateKey();

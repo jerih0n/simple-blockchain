@@ -1,4 +1,5 @@
-﻿using Blockchain.Cryptography.EllipticCurve;
+﻿using Blockchain.Cryptography.Addresses;
+using Blockchain.Cryptography.EllipticCurve;
 using Blockchain.Cryptography.Extenstions;
 using Blockchain.Cryptography.Keys;
 using System;
@@ -14,6 +15,7 @@ namespace temp_test
             //CheckIsMessage();
             Console.WriteLine("Hello World!");
 
+            var ffafa = PrivateKeyGenerator.GeneratePrivateKey();
 
             var privateKeyAsHex = "30780201010420373C982CEFAEE8D3537541DAA90F37409078C8D55D42E60DD976E6C166096259A00B06092B2403030208010107A1440342000463132D1C555946146065659F744ED411304AAC38C65AB23C4D9BA24FF830664A1C70787B36801C02F4F3433D1345447397B1FBD8132856E8F200C4F04D7B7D4A";
             var privateKey = privateKeyAsHex.ToByteArray();

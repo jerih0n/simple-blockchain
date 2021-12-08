@@ -6,7 +6,7 @@ namespace Blockchain.Utils.Cryptography.Node
     {
         public static string GenerateNodeId()
         {
-            return new Guid().ToString(); // TODO:// change this with cryptographic Id base on public key
+            return Guid.NewGuid().ToString(); // TODO:// change this with cryptographic Id base on public key
         }
     }
 }

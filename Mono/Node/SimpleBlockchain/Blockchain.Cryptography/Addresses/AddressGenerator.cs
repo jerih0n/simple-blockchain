@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace Blockchain.Cryptography.EllipticCurve
+namespace Blockchain.Cryptography.Addresses
 {
     public static class AddressGenerator
     {

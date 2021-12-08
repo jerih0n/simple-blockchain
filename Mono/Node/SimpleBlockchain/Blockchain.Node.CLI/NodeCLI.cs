@@ -2,9 +2,6 @@
 using Blockchain.Node.Logic.LocalConnectors;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,11 +15,15 @@ namespace Blockchain.Node.CLI
         private readonly NodeConfiguration _nodeConfiguration;
         
         private readonly BlockchainLocalDataConnector _blockchainLocalDataConnector;
+        private readonly NodeLocalDataConnector _nodeLocalDataConnector;
 
-        public NodeCLI(NodeConfiguration nodeConfiguration, BlockchainLocalDataConnector blockchainLocalDataConnector)
+        public NodeCLI(NodeConfiguration nodeConfiguration, 
+            BlockchainLocalDataConnector blockchainLocalDataConnector, 
+            NodeLocalDataConnector nodeLocalDataConnector)
         {
             _nodeConfiguration = nodeConfiguration;
             _blockchainLocalDataConnector = blockchainLocalDataConnector;
+            _nodeLocalDataConnector = nodeLocalDataConnector;
             Init();
         }
 
@@ -35,13 +36,18 @@ namespace Blockchain.Node.CLI
 
         private void Init()
         {
+            _nodeLocalDataConnector.ReadLocalNodeDb();
             _blockchainLocalDataConnector.ReadLocalDb();
         }
         private async Task StartNode()
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("********************************************* NODE STARTED *********************************************");
             // block from local storage is loaded and we are ready for sync
-            Console.WriteLine("Chose option \n-full - In order to run FULL NODE. Full node needs to be fully synced with the chain and will perform PoW \n-light -for running light node. This node will not sync with the entire chain and will have only the latest blocks");
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Selec option to proceed");
+
             while (true)
             {
                 var input = Console.ReadLine();

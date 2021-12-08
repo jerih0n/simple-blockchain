@@ -1,4 +1,5 @@
-﻿using Blockchain.Node.Configuration;
+﻿using Blockchain.Node.CLI.Extensions;
+using Blockchain.Node.Configuration;
 using Blockchain.Node.Logic.Cache;
 using Blockchain.Node.Logic.LocalConnectors;
 using Microsoft.Extensions.Configuration;
@@ -24,11 +25,9 @@ namespace Blockchain.Node.CLI
             .ConfigureServices((hostingContext, services) =>
             {
                 services.AddMemoryCache();
-                services.AddSingleton<NodeConfiguration>();
-                services.AddSingleton<BlockchainLocalDataConnector>();
-                services.AddSingleton<BlockchainCacheServiceProvider>();
+                services.AddDependencies();
                 services.AddHostedService<NodeCLI>();
-                
+
             });
 
             await builder.RunConsoleAsync();
