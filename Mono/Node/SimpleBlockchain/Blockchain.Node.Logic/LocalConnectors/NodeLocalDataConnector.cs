@@ -8,6 +8,7 @@ namespace Blockchain.Node.Logic.LocalConnectors
 {
     public class NodeLocalDataConnector
     {
+        private bool _isNodeSet;
         private const string NODE_DB_FILE_NAME = "node-data.json";
         private readonly NodeDatabaseCacheServiceProvider _cacheServiceProvider;
         private readonly NodeConfiguration _nodeConfiguration;
@@ -18,6 +19,7 @@ namespace Blockchain.Node.Logic.LocalConnectors
             _cacheServiceProvider = cacheServiceProvider;
             _nodeConfiguration = nodeConfiguration;
             _nodeDbFile = $"{nodeConfiguration.NodeLocalDbPath}/{NODE_DB_FILE_NAME}";
+            _isNodeSet = false;
         }
 
         public void ReadLocalNodeDb()
@@ -50,8 +52,14 @@ namespace Blockchain.Node.Logic.LocalConnectors
                 }
 
             }
+            if(!string.IsNullOrEmpty(nodeDatabase.PrivateKeyEncrypted))
+            {
+                _isNodeSet = true;
+            }
             _cacheServiceProvider.LoadNewNodeConfigInCache(nodeDatabase);
         }
+
+        public bool IsNodeSet { get { return _isNodeSet; } }
 
         private NodeDatabase InitializeNewNode()
         {

@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain.Cryptography", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{4ADB895F-88E7-4DFF-AB3D-20CE6AD30079}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "temp_test", "temp_test\temp_test.csproj", "{98D67309-BD3C-43A2-8D65-AD329ABF3EEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "temp_test", "temp_test\temp_test.csproj", "{98D67309-BD3C-43A2-8D65-AD329ABF3EEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

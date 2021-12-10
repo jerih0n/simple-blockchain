@@ -8,5 +8,6 @@ namespace Blockchain.Node.Configuration
         public string NodeId { get; set; }
         public string ConnectionIP { get; set; }
         public List<NodeConnectionModel> KnowConnections { get; set; } = new List<NodeConnectionModel>();
+        public string PrivateKeyEncrypted { get; set; }
     }
 }
