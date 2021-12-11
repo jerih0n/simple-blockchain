@@ -7,28 +7,17 @@ namespace Blockchain.Node.Logic.Cache
     {
         private const string _nodeDatabaseCacheKey = "nodeDatabase";
         private readonly IMemoryCache _memoryCache;
-        private NodeConfiguration _nodeConfiguration;
 
-
-        public NodeDatabaseCacheServiceProvider(NodeConfiguration nodeConfiguration, IMemoryCache memoryCache)
+        public NodeDatabaseCacheServiceProvider(IMemoryCache memoryCache)
         {
             _memoryCache = memoryCache;
         }
         
-        public void LoadNewNodeConfigInCache(NodeDatabase database)
-        {
-            var existingNodeDatabase = _memoryCache.Get(_nodeDatabaseCacheKey) as NodeDatabase;
-
-            if(existingNodeDatabase != null)
-            {
-                return;
-            }
-
+        public void LoadNewNodeConfigInCache(NodeDatabase database) => 
             _memoryCache.Set(_nodeDatabaseCacheKey, database, new MemoryCacheEntryOptions
-            {
-                Priority = CacheItemPriority.NeverRemove
-            });
+        {
+            Priority = CacheItemPriority.NeverRemove
+        });
 
-        }
     }
 }

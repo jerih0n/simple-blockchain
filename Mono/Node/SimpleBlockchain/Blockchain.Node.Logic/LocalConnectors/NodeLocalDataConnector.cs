@@ -59,7 +59,34 @@ namespace Blockchain.Node.Logic.LocalConnectors
             _cacheServiceProvider.LoadNewNodeConfigInCache(nodeDatabase);
         }
 
+        public void SetNewEncyptedPrivateKey(string encryptedPrivateKey)
+        {
+            if (IsNodeSet) throw new System.Exception("Node already set!");
+            if (!File.Exists(_nodeDbFile)) throw new System.Exception("Node local data cannot be found");
+
+            NodeDatabase nodeDatabase = null;
+            using (var streamReaded = new StreamReader(_nodeDbFile))
+            {
+                var nodeDatabaseAsString = streamReaded.ReadToEnd();
+                 nodeDatabase = JsonConvert.DeserializeObject<NodeDatabase>(nodeDatabaseAsString);
+            }
+
+            nodeDatabase.PrivateKeyEncrypted = encryptedPrivateKey;
+            using(var streamWritter = new StreamWriter(_nodeDbFile))
+            {
+                streamWritter.WriteLine(JsonConvert.SerializeObject(nodeDatabase));
+            }
+            _cacheServiceProvider.LoadNewNodeConfigInCache(nodeDatabase);
+
+        }
+
         public bool IsNodeSet { get { return _isNodeSet; } }
+
+        public bool LoadPrivateKeyInMemory(string password)
+        {
+
+            return false;  
+        }
 
         private NodeDatabase InitializeNewNode()
         {

@@ -1,4 +1,5 @@
-﻿using Blockchain.Node.CLI.Processors;
+﻿using Blockchain.Node.CLI.CommandInterfaces;
+using Blockchain.Node.CLI.Processors;
 using Blockchain.Node.Configuration;
 using Blockchain.Node.Logic.Cache;
 using Blockchain.Node.Logic.LocalConnectors;
@@ -16,6 +17,7 @@ namespace Blockchain.Node.CLI.Extensions
             services.AddSingleton<NodeLocalDataConnector>();
             services.AddSingleton<NodeDatabaseCacheServiceProvider>();
             services.AddSingleton<NodeProcessor>();
+            services.AddSingleton<CommandLineInterface>();
         }
     }
 }

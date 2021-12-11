@@ -1,4 +1,5 @@
-﻿using Blockchain.Node.CLI.Processors;
+﻿using Blockchain.Node.CLI.CommandInterfaces;
+using Blockchain.Node.CLI.Processors;
 using Blockchain.Node.Configuration;
 using Blockchain.Node.Logic.LocalConnectors;
 using Microsoft.Extensions.Hosting;
@@ -14,21 +15,13 @@ namespace Blockchain.Node.CLI
         private readonly NodeConfiguration _nodeConfiguration;
 
         private bool _isNodeSet;
-        private readonly BlockchainLocalDataConnector _blockchainLocalDataConnector;
-        private readonly NodeLocalDataConnector _nodeLocalDataConnector;
-        private readonly NodeProcessor _commandProcessor;
+        private readonly CommandLineInterface _commandLineInterface;
 
         public NodeCLI(NodeConfiguration nodeConfiguration, 
-            BlockchainLocalDataConnector blockchainLocalDataConnector, 
-            NodeLocalDataConnector nodeLocalDataConnector, 
-            NodeProcessor commandProcessor)
+            CommandLineInterface commandLineInterface)
         {
             _nodeConfiguration = nodeConfiguration;
-            _blockchainLocalDataConnector = blockchainLocalDataConnector;
-            _nodeLocalDataConnector = nodeLocalDataConnector;
-            _commandProcessor = commandProcessor;
-
-            Init();
+            _commandLineInterface = commandLineInterface;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken) => await StartNode();
@@ -38,20 +31,9 @@ namespace Blockchain.Node.CLI
             throw new NotImplementedException();
         }
 
-        private void Init()
-        {
-            _nodeLocalDataConnector.ReadLocalNodeDb();
-            _blockchainLocalDataConnector.ReadLocalDb();
-            _isNodeSet = _nodeLocalDataConnector.IsNodeSet;
-        }
         private async Task StartNode()
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("********************************************* NODE STARTED *********************************************");
-            // block from local storage is loaded and we are ready for sync
-            Console.WriteLine("********************************************************************************************************");
-            Console.WriteLine("Chose command");
-            Console.WriteLine(_commandProcessor.ListAllCommands());
+            _commandLineInterface.OpenCLI();
         }
     }
 }
