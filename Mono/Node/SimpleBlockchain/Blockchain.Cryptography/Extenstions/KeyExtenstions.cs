@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Blockchain.Cryptography.Extenstions
@@ -36,5 +37,15 @@ namespace Blockchain.Cryptography.Extenstions
             return result.ToArray();
         }
 
+        public static byte[] Sha256(this string inputedString)
+        {
+            var byteArray = inputedString.ToByteArray();
+            return SHA256.Create().ComputeHash(byteArray);
+        }
+
+        public static byte[] Sha256(this byte[] byteArray)
+        {
+            return SHA256.Create().ComputeHash(byteArray);
+        }
     }
 }

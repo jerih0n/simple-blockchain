@@ -15,32 +15,8 @@ namespace temp_test
         
         static void Main(string[] args)
         {
-            //CheckIsMessage();
-            Console.WriteLine("Hello World!");
-
-
-            var previousHash = "546B99B24C23F6F3A7FF3624E7806AAE3BC8360637777B6DEFD5D3FD89FB31CB";
-            //var NextHash = "546B99B24C23F6F3A7FF3624E7806AAE3BC8360637777B6DEFD5D3FD89FB31CB";
-            var aa2 = "";
-            var bytes = previousHash.ToByteArray();
-            byte[] ina = new byte[32];
-            RandomNumberGenerator.Create().GetBytes(ina);
-            BigInteger bigInt = new BigInteger(bytes);
-            int incrementor = 1;
-            while(true)
-            {
-                bigInt = bigInt + incrementor;
-                var sha256 = SHA256.Create().ComputeHash(bigInt.ToByteArray());
-                BitArray bitArray = new BitArray(sha256);
-                if(bitArray[0] == false && bitArray[1] == false)
-                {
-                    //solution found!
-                    //sha256 is the solution
-                    var aa = sha256.ToHex();
-                    Console.WriteLine(aa);
-                }
-                incrementor++;
-            }
+            var blockHash = "0000E0B4181B4986C4B95CFA07D1A2A77233556194DBC0971A05FC65DCDA86AE";
+            var bytea = blockHash.ToByteArray();
 
             var ffafa = PrivateKeyGenerator.GeneratePrivateKey();
 

@@ -9,15 +9,15 @@ using System.Numerics;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace Blockchain.Node.Logic.Algoriths.PoW
+namespace Blockchain.Node.Logic.Algorithms.PoW
 {
-    public class BlockMiner
+    public class BlockMinerProcessor
     {
         private readonly NodeLocalDataConnector _nodeLocalDataConnector;
         private readonly BlockchainLocalDataConnector _blockchainLocalDataConnector;
         private readonly bool _continueMining;
 
-        public BlockMiner(NodeLocalDataConnector nodelocalDataConnector, BlockchainLocalDataConnector blockchainLocalDataConnector)
+        public BlockMinerProcessor(NodeLocalDataConnector nodelocalDataConnector, BlockchainLocalDataConnector blockchainLocalDataConnector)
         {
             _nodeLocalDataConnector = nodelocalDataConnector;
             _blockchainLocalDataConnector = blockchainLocalDataConnector;
@@ -48,6 +48,7 @@ namespace Blockchain.Node.Logic.Algoriths.PoW
                 var newBlock = await Task<Block>.Factory.StartNew(() => MineNewBlock(previousHash, complexity, lastBlockId));
                 newBlock = AddTransactionsToTheNewBlock(newBlock);
                 RecordInLocalDb(newBlock);
+                //Take block reward - mint new token
                 //Notify nodes
                 //TODO: for now console write line
                 Console.WriteLine($"new block mined! block hash {newBlock.BlockHash} block time {newBlock.BlockTime}");
@@ -116,6 +117,11 @@ namespace Blockchain.Node.Logic.Algoriths.PoW
         private void RecordInLocalDb(Block newBlock)
         {
             _blockchainLocalDataConnector.AddNewBlock(newBlock);
+        }
+
+        private void TakeRewardForFindingNewBlock(Block block)
+        {
+
         }
     }
 }

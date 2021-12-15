@@ -1,7 +1,7 @@
 ﻿using Blockchain.Node.CLI.CommandInterfaces;
 using Blockchain.Node.CLI.Processors;
 using Blockchain.Node.Configuration;
-using Blockchain.Node.Logic.Algoriths.PoW;
+using Blockchain.Node.Logic.Algorithms.PoW;
 using Blockchain.Node.Logic.Cache;
 using Blockchain.Node.Logic.LocalConnectors;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +19,7 @@ namespace Blockchain.Node.CLI.Extensions
             services.AddSingleton<NodeDatabaseCacheServiceProvider>();
             services.AddSingleton<NodeProcessor>();
             services.AddSingleton<CommandLineInterface>();
-            services.AddSingleton<BlockMiner>();
+            services.AddSingleton<BlockMinerProcessor>();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Blockchain.Node.CLI
 
         private async Task StartNode()
         {
-            _commandLineInterface.OpenCLI();
+            await _commandLineInterface.OpenCLI();
         }
     }
 }

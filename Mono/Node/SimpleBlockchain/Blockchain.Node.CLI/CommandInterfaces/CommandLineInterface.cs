@@ -1,7 +1,7 @@
 ﻿using Blockchain.Cryptography.Extenstions;
 using Blockchain.Node.CLI.Constants;
 using Blockchain.Node.CLI.Processors;
-using Blockchain.Node.Logic.Algoriths.PoW;
+using Blockchain.Node.Logic.Algorithms.PoW;
 using Blockchain.Node.Logic.LocalConnectors;
 using System;
 using System.Threading.Tasks;
@@ -13,12 +13,12 @@ namespace Blockchain.Node.CLI.CommandInterfaces
         private readonly NodeLocalDataConnector _nodeLocalDataConnector;
         private readonly BlockchainLocalDataConnector _blockchainLocalDataConnector;
         private readonly NodeProcessor _nodeProcessor;
-        private readonly BlockMiner _blockMiner;
+        private readonly BlockMinerProcessor _blockMiner;
 
         public CommandLineInterface(NodeLocalDataConnector nodeLocalDataConnector, 
             BlockchainLocalDataConnector blockchainLocalDataConnector,
             NodeProcessor nodeProcessor,
-            BlockMiner blockMiner)
+            BlockMinerProcessor blockMiner)
         {
             _nodeLocalDataConnector = nodeLocalDataConnector;
             _blockchainLocalDataConnector = blockchainLocalDataConnector;
