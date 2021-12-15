@@ -13,11 +13,12 @@ namespace Blockchain.Node.Logic.Cache
             _memoryCache = memoryCache;
         }
         
-        public void LoadNewNodeConfigInCache(NodeDatabase database) => 
+        public void LoadNewNodeDatabase(NodeDatabase database) => 
             _memoryCache.Set(_nodeDatabaseCacheKey, database, new MemoryCacheEntryOptions
         {
             Priority = CacheItemPriority.NeverRemove
         });
+
 
     }
 }

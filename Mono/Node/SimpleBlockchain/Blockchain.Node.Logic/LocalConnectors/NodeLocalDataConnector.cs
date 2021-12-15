@@ -1,4 +1,5 @@
-﻿using Blockchain.Node.Configuration;
+﻿using Blockchain.Cryptography.Encryption;
+using Blockchain.Node.Configuration;
 using Blockchain.Node.Logic.Cache;
 using Blockchain.Utils.Cryptography.Node;
 using Newtonsoft.Json;
@@ -8,6 +9,7 @@ namespace Blockchain.Node.Logic.LocalConnectors
 {
     public class NodeLocalDataConnector
     {
+        private readonly NodeDatabase _nodeDatabase;
         private bool _isNodeSet;
         private const string NODE_DB_FILE_NAME = "node-data.json";
         private readonly NodeDatabaseCacheServiceProvider _cacheServiceProvider;
@@ -20,9 +22,10 @@ namespace Blockchain.Node.Logic.LocalConnectors
             _nodeConfiguration = nodeConfiguration;
             _nodeDbFile = $"{nodeConfiguration.NodeLocalDbPath}/{NODE_DB_FILE_NAME}";
             _isNodeSet = false;
+            _nodeDatabase = ReadLocalNodeDb();
         }
 
-        public void ReadLocalNodeDb()
+        public NodeDatabase ReadLocalNodeDb()
         {
             NodeDatabase nodeDatabase = null;
 
@@ -56,7 +59,9 @@ namespace Blockchain.Node.Logic.LocalConnectors
             {
                 _isNodeSet = true;
             }
-            _cacheServiceProvider.LoadNewNodeConfigInCache(nodeDatabase);
+            _cacheServiceProvider.LoadNewNodeDatabase(nodeDatabase);
+
+            return nodeDatabase;
         }
 
         public void SetNewEncyptedPrivateKey(string encryptedPrivateKey)
@@ -76,7 +81,7 @@ namespace Blockchain.Node.Logic.LocalConnectors
             {
                 streamWritter.WriteLine(JsonConvert.SerializeObject(nodeDatabase));
             }
-            _cacheServiceProvider.LoadNewNodeConfigInCache(nodeDatabase);
+            _cacheServiceProvider.LoadNewNodeDatabase(nodeDatabase);
 
         }
 
@@ -84,6 +89,11 @@ namespace Blockchain.Node.Logic.LocalConnectors
 
         public bool LoadPrivateKeyInMemory(string password)
         {
+            if(string.IsNullOrEmpty(_nodeDatabase.PrivateKeyEncrypted))
+            {
+                throw new System.Exception("Node has no prive key set");
+            }
+            var decryptedPrivateKey = AESEncryptionProvider.Decrypt(_nodeDatabase.PrivateKeyEncrypted, password);
 
             return false;  
         }
@@ -96,6 +106,8 @@ namespace Blockchain.Node.Logic.LocalConnectors
                 ConnectionIP = $"{_nodeConfiguration.NodeIp}:{_nodeConfiguration.NodePort}"
             };
         }
+
+        
 
     }
 }

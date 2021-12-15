@@ -10,7 +10,7 @@ namespace Blockchain.Node.Logic.LocalConnectors
     public class BlockchainLocalDataConnector
     {
         private const string BlockChainFileName = "chain.json";
-
+        private readonly object _lock = new object();
         private readonly string _localDbFilePath;
         private readonly string _blockchainFile;
         private BlockchainCacheServiceProvider _cacheServiceProvider;
@@ -58,6 +58,21 @@ namespace Blockchain.Node.Logic.LocalConnectors
             return _cacheServiceProvider.GetLastBlock();
         }
 
+        public void AddNewBlock(Block newBlock)
+        {
+            _cacheServiceProvider.InsertNewBlock(newBlock);
+            var blockchain = _cacheServiceProvider.GetEntireBlockchain();
+
+            lock(_lock)
+            {
+                using (var writter = new StreamWriter(_blockchainFile))
+                {
+                    writter.WriteLine(JsonConvert.SerializeObject(blockchain));
+                }
+            }
+           
+        }
+
         private BlockchainModel InitializeEmptykLocalBlockchain()
         {
             var newBlockchainLocalRecord = new BlockchainModel();
@@ -70,6 +85,7 @@ namespace Blockchain.Node.Logic.LocalConnectors
             return newBlockchainLocalRecord;
         }
 
+        
         //After insertion in memory first
         private void InsertNewBlockInLocalStorage(Block newBlock)
         {

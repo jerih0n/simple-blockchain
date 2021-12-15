@@ -3,6 +3,8 @@ using Blockchain.Cryptography.EllipticCurve;
 using Blockchain.Cryptography.Extenstions;
 using Blockchain.Cryptography.Keys;
 using System;
+using System.Collections;
+using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,10 +12,35 @@ namespace temp_test
 {
     class Program
     {
+        
         static void Main(string[] args)
         {
             //CheckIsMessage();
             Console.WriteLine("Hello World!");
+
+
+            var previousHash = "546B99B24C23F6F3A7FF3624E7806AAE3BC8360637777B6DEFD5D3FD89FB31CB";
+            //var NextHash = "546B99B24C23F6F3A7FF3624E7806AAE3BC8360637777B6DEFD5D3FD89FB31CB";
+            var aa2 = "";
+            var bytes = previousHash.ToByteArray();
+            byte[] ina = new byte[32];
+            RandomNumberGenerator.Create().GetBytes(ina);
+            BigInteger bigInt = new BigInteger(bytes);
+            int incrementor = 1;
+            while(true)
+            {
+                bigInt = bigInt + incrementor;
+                var sha256 = SHA256.Create().ComputeHash(bigInt.ToByteArray());
+                BitArray bitArray = new BitArray(sha256);
+                if(bitArray[0] == false && bitArray[1] == false)
+                {
+                    //solution found!
+                    //sha256 is the solution
+                    var aa = sha256.ToHex();
+                    Console.WriteLine(aa);
+                }
+                incrementor++;
+            }
 
             var ffafa = PrivateKeyGenerator.GeneratePrivateKey();
 
@@ -26,7 +53,7 @@ namespace temp_test
             var publicKeyAsHex = getPublicKey.ToHex();
             var convertedPublicKeyAsBiteAray = publicKeyAsHex.ToByteArray();
 
-            var someText = "Ivan Qde kiselo Zeli";
+            var someText = "Test";
             var msg = Encoding.UTF8.GetBytes(someText);
             var signature = a.SignData(msg, HashAlgorithmName.SHA256);
             var signatureAsHex = signature.ToHex();

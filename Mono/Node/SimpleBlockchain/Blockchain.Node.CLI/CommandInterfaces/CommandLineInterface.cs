@@ -1,8 +1,10 @@
 ﻿using Blockchain.Cryptography.Extenstions;
 using Blockchain.Node.CLI.Constants;
 using Blockchain.Node.CLI.Processors;
+using Blockchain.Node.Logic.Algoriths.PoW;
 using Blockchain.Node.Logic.LocalConnectors;
 using System;
+using System.Threading.Tasks;
 
 namespace Blockchain.Node.CLI.CommandInterfaces
 {
@@ -11,21 +13,23 @@ namespace Blockchain.Node.CLI.CommandInterfaces
         private readonly NodeLocalDataConnector _nodeLocalDataConnector;
         private readonly BlockchainLocalDataConnector _blockchainLocalDataConnector;
         private readonly NodeProcessor _nodeProcessor;
-        
+        private readonly BlockMiner _blockMiner;
 
         public CommandLineInterface(NodeLocalDataConnector nodeLocalDataConnector, 
             BlockchainLocalDataConnector blockchainLocalDataConnector,
-            NodeProcessor nodeProcessor)
+            NodeProcessor nodeProcessor,
+            BlockMiner blockMiner)
         {
             _nodeLocalDataConnector = nodeLocalDataConnector;
             _blockchainLocalDataConnector = blockchainLocalDataConnector;
             _nodeProcessor = nodeProcessor;
+            _blockMiner = blockMiner;
 
             _nodeLocalDataConnector.ReadLocalNodeDb();
             _blockchainLocalDataConnector.ReadLocalDb();
         }
 
-        public void OpenCLI()
+        public async Task OpenCLI()
         {       
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("********************************************* NODE STARTED *********************************************");
@@ -35,10 +39,31 @@ namespace Blockchain.Node.CLI.CommandInterfaces
             {
                 SetUpNodeAccount();
             }
-            LoadPrivateKeyInMemory();
             Console.WriteLine("Node account is set");
             Console.WriteLine("Chose command");
             Console.WriteLine(_nodeProcessor.ListAllCommands());
+
+            string command = string.Empty;
+            while(true)
+            {
+                command = Console.ReadLine();
+                if(!SupportedCommands.AllSupportedCommands.Contains(command))
+                {
+                    Console.WriteLine("Invalid Command");
+                    continue;
+                }
+                break;
+            }
+            await ExecuteCommandAsync(command);
+        }
+        public async Task ExecuteCommandAsync(string command)
+        {
+            switch(command)
+            {
+                case SupportedCommands.Start:
+                    await _blockMiner.StartMining();
+                    break;
+            }
         }
         private void SetUpNodeAccount()
         {
@@ -85,11 +110,6 @@ namespace Blockchain.Node.CLI.CommandInterfaces
                 }
             }
         }
-        private void LoadPrivateKeyInMemory()
-        {
-            Console.WriteLine("Plase enter password for your account");
-            var password = Console.ReadLine();
-            _nodeLocalDataConnector.
-        }
+       
     }
 }
