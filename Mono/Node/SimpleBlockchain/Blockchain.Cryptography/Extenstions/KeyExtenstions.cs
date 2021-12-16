@@ -37,15 +37,12 @@ namespace Blockchain.Cryptography.Extenstions
             return result.ToArray();
         }
 
-        public static byte[] Sha256(this string inputedString)
-        {
-            var byteArray = inputedString.ToByteArray();
-            return SHA256.Create().ComputeHash(byteArray);
-        }
+        public static byte[] Sha256(this string inputedString) => Sha256(inputedString.ToByteArray());
 
-        public static byte[] Sha256(this byte[] byteArray)
-        {
-            return SHA256.Create().ComputeHash(byteArray);
-        }
+        public static byte[] TotUtf8ByteArray(this string input) => Encoding.UTF8.GetBytes(input);
+       
+        public static byte[] Sha256Utf8String(this string input) => Sha256(TotUtf8ByteArray(input));
+       
+        public static byte[] Sha256(this byte[] byteArray) => SHA256.Create().ComputeHash(byteArray); 
     }
 }

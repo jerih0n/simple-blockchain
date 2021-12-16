@@ -28,7 +28,7 @@ namespace Blockchain.Utils
         public string VerificationNodeId { get; set; }
         public TransactionStatusEnum TransactionStatus { get; set; }
         public long Block { get; set; }
-
-      
+        public string Signiture { get; set; }
+        public string PublicKey { get; set; }
     }
 }

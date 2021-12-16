@@ -15,17 +15,21 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
     {
         private readonly NodeLocalDataConnector _nodeLocalDataConnector;
         private readonly BlockchainLocalDataConnector _blockchainLocalDataConnector;
+        private readonly BlockRewardProccessor _blockRewardProccessor;
         private readonly bool _continueMining;
 
-        public BlockMinerProcessor(NodeLocalDataConnector nodelocalDataConnector, BlockchainLocalDataConnector blockchainLocalDataConnector)
+        public BlockMinerProcessor(NodeLocalDataConnector nodelocalDataConnector,
+            BlockchainLocalDataConnector blockchainLocalDataConnector,
+            BlockRewardProccessor blockRewardProccessor)
         {
             _nodeLocalDataConnector = nodelocalDataConnector;
             _blockchainLocalDataConnector = blockchainLocalDataConnector;
+            _blockRewardProccessor = blockRewardProccessor;
             _continueMining = true;
         }
 
      
-        public async Task StartMining()
+        public async Task StartMining(byte[] privateKey)
         {
             string previousHash = string.Empty;
             var lastBlock = _blockchainLocalDataConnector.GetLastBlock();
@@ -46,6 +50,8 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
             while(_continueMining)
             {
                 var newBlock = await Task<Block>.Factory.StartNew(() => MineNewBlock(previousHash, complexity, lastBlockId));
+                newBlock = AddTransactionsToTheNewBlock(newBlock);
+                newBlock = TakeRewardForFindingNewBlock(newBlock, privateKey);
                 newBlock = AddTransactionsToTheNewBlock(newBlock);
                 RecordInLocalDb(newBlock);
                 //Take block reward - mint new token
@@ -119,9 +125,12 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
             _blockchainLocalDataConnector.AddNewBlock(newBlock);
         }
 
-        private void TakeRewardForFindingNewBlock(Block block)
+        private Block TakeRewardForFindingNewBlock(Block block, byte[] privateKey)
         {
-
+            var rewardingTransaction = _blockRewardProccessor.CreateNewRewardTransaction(block.BlockHash, privateKey);
+            block.BlockHeader.RewardTransaction = rewardingTransaction;
+            block.BlockHeader.RewardTransaction.TransactionStatus = TransactionStatusEnum.Success;
+            return block;
         }
     }
 }

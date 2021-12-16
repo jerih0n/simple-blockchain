@@ -1,4 +1,5 @@
 ﻿using Blockchain.Cryptography.Encryption;
+using Blockchain.Cryptography.Extenstions;
 using Blockchain.Node.Configuration;
 using Blockchain.Node.Logic.Cache;
 using Blockchain.Utils.Cryptography.Node;
@@ -34,8 +35,11 @@ namespace Blockchain.Node.Logic.LocalConnectors
                 //create new one 
 
                 Directory.CreateDirectory(_nodeConfiguration.NodeLocalDbPath);
-                File.Create(_nodeDbFile);
+                using (File.Create(_nodeDbFile))
+                {
 
+                }
+                
             }
             using (var streamReaded = new StreamReader(_nodeDbFile))
             {
@@ -60,7 +64,6 @@ namespace Blockchain.Node.Logic.LocalConnectors
                 _isNodeSet = true;
             }
             _cacheServiceProvider.LoadNewNodeDatabase(nodeDatabase);
-
             return nodeDatabase;
         }
 
@@ -82,20 +85,25 @@ namespace Blockchain.Node.Logic.LocalConnectors
                 streamWritter.WriteLine(JsonConvert.SerializeObject(nodeDatabase));
             }
             _cacheServiceProvider.LoadNewNodeDatabase(nodeDatabase);
-
+            _nodeDatabase.PrivateKeyEncrypted = encryptedPrivateKey;
         }
 
         public bool IsNodeSet { get { return _isNodeSet; } }
 
-        public bool LoadPrivateKeyInMemory(string password)
+        public bool AddPrivateKeyInMemory(string password)
         {
             if(string.IsNullOrEmpty(_nodeDatabase.PrivateKeyEncrypted))
             {
                 throw new System.Exception("Node has no prive key set");
             }
             var decryptedPrivateKey = AESEncryptionProvider.Decrypt(_nodeDatabase.PrivateKeyEncrypted, password);
+            _cacheServiceProvider.AddPrivateKey(decryptedPrivateKey.ToByteArray());
+            return true ;  
+        }
 
-            return false;  
+        public byte[] GetPrivateKey()
+        {
+            return _cacheServiceProvider.GetPrivateKey();
         }
 
         private NodeDatabase InitializeNewNode()

@@ -54,6 +54,7 @@ namespace Blockchain.Node.CLI.CommandInterfaces
                 }
                 break;
             }
+            LoadPrivateKeyInMemory();
             await ExecuteCommandAsync(command);
         }
         public async Task ExecuteCommandAsync(string command)
@@ -61,7 +62,7 @@ namespace Blockchain.Node.CLI.CommandInterfaces
             switch(command)
             {
                 case SupportedCommands.Start:
-                    await _blockMiner.StartMining();
+                    await _blockMiner.StartMining(_nodeLocalDataConnector.GetPrivateKey());
                     break;
             }
         }
@@ -100,6 +101,7 @@ namespace Blockchain.Node.CLI.CommandInterfaces
                     Console.WriteLine("Enter Password");
                     password = Console.ReadLine();
                     _nodeProcessor.RestoreFromPrivateKeyEncypted(privateKeyAsString, password);
+                    _nodeLocalDataConnector.AddPrivateKeyInMemory(password);
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("NODE IS INITIALIZED. Your private key is stored in the local database");
                     break;
@@ -109,6 +111,27 @@ namespace Blockchain.Node.CLI.CommandInterfaces
                     Console.WriteLine("Unknown Commands");
                 }
             }
+        }
+
+        private void LoadPrivateKeyInMemory()
+        {
+            while(true)
+            {
+                try
+                {
+                    Console.WriteLine("Enter wallet password");
+                    string password = Console.ReadLine();
+                    _nodeLocalDataConnector.AddPrivateKeyInMemory(password);
+                    break;
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid Attempt! Try Again!");
+                }
+            }
+            
         }
        
     }

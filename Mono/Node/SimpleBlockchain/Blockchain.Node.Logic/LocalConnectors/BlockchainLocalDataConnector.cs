@@ -30,7 +30,10 @@ namespace Blockchain.Node.Logic.LocalConnectors
                 //create new one 
                
                 Directory.CreateDirectory(_localDbFilePath);
-                File.Create(_blockchainFile);
+                using (File.Create(_blockchainFile))
+                {
+
+                }
                 
             }
             using(var streamReaded = new StreamReader(_blockchainFile))

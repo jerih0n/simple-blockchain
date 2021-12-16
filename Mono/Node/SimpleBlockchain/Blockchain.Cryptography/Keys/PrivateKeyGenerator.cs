@@ -1,6 +1,5 @@
 ﻿using Blockchain.Cryptography.EllipticCurve;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Blockchain.Cryptography.Keys
 {
@@ -14,5 +13,6 @@ namespace Blockchain.Cryptography.Keys
             var privateKey = curveProtocol.ExportECPrivateKey();
             return privateKey;
         }
+
     }
 }

@@ -15,9 +15,9 @@ namespace Blockchain.Node.CLI.Constants
         {
             SetNode,
             RestoreNode,
-            Help,
-            NodeDetails,
-            Synch,
+            //Help,
+            //NodeDetails,
+            //Synch,
             Start
         };
     }

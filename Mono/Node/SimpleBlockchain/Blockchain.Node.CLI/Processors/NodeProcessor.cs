@@ -18,7 +18,7 @@ namespace Blockchain.Node.CLI.Processors
 
         public string ListAllCommands()
         {
-            return string.Join("\n", SupportedCommands.AllSupportedCommands);
+            return string.Join(" ", SupportedCommands.AllSupportedCommands);
         }
 
         public void SetNewNodeKey(string password)

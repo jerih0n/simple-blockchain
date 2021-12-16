@@ -1,5 +1,4 @@
-﻿
-using Blockchain.Cryptography.Extenstions;
+﻿using Blockchain.Cryptography.Extenstions;
 using System.Security.Cryptography;
 
 namespace Blockchain.Cryptography.EllipticCurve
@@ -24,6 +23,13 @@ namespace Blockchain.Cryptography.EllipticCurve
         {
             var privateKeyAsByteArray = privateKey.ToByteArray();
             return GetPublicKeyFromPrivate(privateKeyAsByteArray);
+        }
+
+        public byte[] SignTransactionHash(byte[] transactionHash, byte[] privateKey)
+        {
+            _elipticCurveAlgorithInstance.ImportECPrivateKey(privateKey, out int bytes);
+
+            return _elipticCurveAlgorithInstance.SignData(transactionHash, HashAlgorithmName.SHA256);
         }
     }
 }
