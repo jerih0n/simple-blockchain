@@ -1,7 +1,4 @@
 ﻿using Blockchain.Node.CLI.Extensions;
-using Blockchain.Node.Configuration;
-using Blockchain.Node.Logic.Cache;
-using Blockchain.Node.Logic.LocalConnectors;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

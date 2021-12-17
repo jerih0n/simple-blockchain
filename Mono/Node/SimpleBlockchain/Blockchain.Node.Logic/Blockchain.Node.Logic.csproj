@@ -12,12 +12,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Blockchain.Cryptography\Blockchain.Cryptography.csproj" />
+    <ProjectReference Include="..\Blockchain.Networking\Blockchain.Networking.csproj" />
     <ProjectReference Include="..\Blockchain.Node.Configuration\Blockchain.Node.Configuration.csproj" />
     <ProjectReference Include="..\Blockchain.Utils\Blockchain.Utils.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="NetworkConnector\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Blockchain.Cryptography.Extenstions;
+using Blockchain.Networking.Server;
 using Blockchain.Node.Configuration;
 using Blockchain.Node.Logic.LocalConnectors;
 using Blockchain.Utils;
@@ -17,14 +18,17 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
         private readonly BlockchainLocalDataConnector _blockchainLocalDataConnector;
         private readonly BlockRewardProccessor _blockRewardProccessor;
         private readonly bool _continueMining;
+        private readonly NodePeerServer _nodePeerServer;
 
         public BlockMinerProcessor(NodeLocalDataConnector nodelocalDataConnector,
             BlockchainLocalDataConnector blockchainLocalDataConnector,
-            BlockRewardProccessor blockRewardProccessor)
+            BlockRewardProccessor blockRewardProccessor,
+            NodePeerServer nodePeerServer)
         {
             _nodeLocalDataConnector = nodelocalDataConnector;
             _blockchainLocalDataConnector = blockchainLocalDataConnector;
             _blockRewardProccessor = blockRewardProccessor;
+            _nodePeerServer = nodePeerServer;
             _continueMining = true;
         }
 
@@ -53,12 +57,14 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
                 newBlock = AddTransactionsToTheNewBlock(newBlock);
                 newBlock = TakeRewardForFindingNewBlock(newBlock, privateKey);
                 newBlock = AddTransactionsToTheNewBlock(newBlock);
+                PublishNewBlock(newBlock);
                 RecordInLocalDb(newBlock);
+                
                 //Take block reward - mint new token
                 //Notify nodes
                 //TODO: for now console write line
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"new block mined! block hash {newBlock.BlockHash} block time {newBlock.BlockTime}");
+                Console.WriteLine($"new block found with hash {newBlock.BlockHash} block time {newBlock.BlockTime}");
                 previousHash = newBlock.BlockHash;
                 complexity = newBlock.NextComplexity;
                 lastBlockId = newBlock.Id;
@@ -134,6 +140,11 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
             rewardingTransaction.IsVerified = true;
             block.BlockHeader.RewardTransaction = rewardingTransaction;
             return block;
+        }
+
+        private void PublishNewBlock(Block block)
+        {
+            _nodePeerServer.PushNewBlock(block);
         }
     }
 }
