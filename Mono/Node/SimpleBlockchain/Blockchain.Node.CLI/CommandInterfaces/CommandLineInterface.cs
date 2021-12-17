@@ -62,7 +62,7 @@ namespace Blockchain.Node.CLI.CommandInterfaces
             switch(command)
             {
                 case SupportedCommands.Start:
-                    await _blockMiner.StartMining(_nodeLocalDataConnector.GetPrivateKey());
+                    await RunMiner();
                     break;
             }
         }
@@ -132,6 +132,15 @@ namespace Blockchain.Node.CLI.CommandInterfaces
                 }
             }
             
+        }
+
+        private async Task RunMiner()
+        {
+            var lastBlock = _blockchainLocalDataConnector.GetLastBlock();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"Starting from last block with Id {lastBlock.Id} and hash {lastBlock.BlockHash}");
+            Console.ForegroundColor = ConsoleColor.White;
+            await _blockMiner.StartMining(_nodeLocalDataConnector.GetPrivateKey());
         }
        
     }

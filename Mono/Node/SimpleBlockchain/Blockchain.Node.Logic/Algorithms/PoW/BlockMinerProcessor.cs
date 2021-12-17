@@ -57,10 +57,12 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
                 //Take block reward - mint new token
                 //Notify nodes
                 //TODO: for now console write line
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"new block mined! block hash {newBlock.BlockHash} block time {newBlock.BlockTime}");
                 previousHash = newBlock.BlockHash;
                 complexity = newBlock.NextComplexity;
                 lastBlockId = newBlock.Id;
+                Console.ForegroundColor = ConsoleColor.Cyan;
             }
 
         }
@@ -128,8 +130,9 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
         private Block TakeRewardForFindingNewBlock(Block block, byte[] privateKey)
         {
             var rewardingTransaction = _blockRewardProccessor.CreateNewRewardTransaction(block.BlockHash, privateKey);
+            rewardingTransaction.TransactionStatus = TransactionStatusEnum.Success;
+            rewardingTransaction.IsVerified = true;
             block.BlockHeader.RewardTransaction = rewardingTransaction;
-            block.BlockHeader.RewardTransaction.TransactionStatus = TransactionStatusEnum.Success;
             return block;
         }
     }

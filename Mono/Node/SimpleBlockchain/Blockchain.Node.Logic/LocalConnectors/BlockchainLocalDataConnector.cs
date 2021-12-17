@@ -3,6 +3,7 @@ using Blockchain.Node.Logic.Cache;
 using Blockchain.Utils;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
+using System;
 using System.IO;
 
 namespace Blockchain.Node.Logic.LocalConnectors
@@ -42,14 +43,13 @@ namespace Blockchain.Node.Logic.LocalConnectors
                 blockchain = JsonConvert.DeserializeObject<BlockchainModel>(blockchainAsString);
             }
 
-            if(blockchain == null || blockchain.Blocks != null || blockchain.Blocks.Count == 0)
+            if(blockchain == null || blockchain.Blocks == null || blockchain.Blocks.Count == 0)
             {
                 // no data is recorded 
                 //init emtpy record InitializeEmptykLocalBlockchain();
                blockchain = InitializeEmptykLocalBlockchain();
                 
             }
-
             _cacheServiceProvider.LoadBlockchainInMemory(blockchain);
 
             return true;
