@@ -26,7 +26,7 @@ namespace Blockchain.Node.CLI.Extensions
             services.AddSingleton<BlockRewardProccessor>();
             services.AddSingleton<TransactionManager>();
             services.AddSingleton<EllipticCurveProcessor>();
-            services.AddSingleton<NodePeerServer>();
+            //services.AddSingleton<NodePeerServer>();
         }
     }
 }

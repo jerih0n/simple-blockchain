@@ -6,13 +6,17 @@ using System.Text;
 
 namespace Blockchain.Networking.Clients
 {
-    internal class NodeServer : NodeNetworkBase
+    public class NodeServer : NodeNetworkBase
     {
-
+        private readonly int _sex;
+        private string _newBlockExchangeName = "blocks_{0}";
+        public NodeServer(int nodeSex)
+        {
+            _sex = nodeSex;
+            _newBlockExchangeName = string.Format(_newBlockExchangeName, _sex);
+        }
         public void PushNewBlock(Block block) => PushToNetwork(block, "", NetworkPushType.Exchange, "");
-
         public void PushValidatedTransaction(Transaction transaction) => PushToNetwork(transaction, "", NetworkPushType.Queue, null);
-
 
         private void PushToNetwork<T>(T data, string exchangeName, NetworkPushType networkPushType, string notifyMessage = null)
         {

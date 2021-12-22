@@ -1,9 +1,7 @@
-﻿using Blockchain.Node.Configuration;
+﻿using Blockchain.Networking.Clients;
 using Blockchain.Utils;
-using Blockchain.Utils.Helpers;
 using RabbitMQ.Client;
 using System;
-using System.Text;
 
 namespace Blockchain.Networking.Server
 {
@@ -11,11 +9,11 @@ namespace Blockchain.Networking.Server
     {       
         private readonly ConnectionFactory _connectionFactory;
         private IConnection _connection;
+        private NodeServer _nodeServer;
 
-        public NetworkConnectionService()
+        public NetworkConnectionService(NodeServer nodeServer)
         {
-            _connectionFactory = SetConeectionFactory();
-            OpenConnection();
+            _nodeServer = nodeServer;
         }
 
         public void Dispose()
@@ -24,50 +22,9 @@ namespace Blockchain.Networking.Server
             _connection.Dispose(); 
         }
 
-        public void PushNewBlock(Block block)
-        {
-            using(var channel = _connection.CreateModel())
-            {
-                var blockJson = ConverterHelper.Serialize(block);
+        public void PushNewBlock(Block block) => _nodeServer.PushNewBlock(block);
 
-                //TODO:
-                channel.QueueDeclare(queue: NetworkConstants.BlocksQueue,
-                                     durable: true,
-                                     exclusive: false,
-                                     autoDelete: false,
-                                     arguments: null);
+        public void PushNewValidTransaction(Transaction transaction) => _nodeServer.PushValidatedTransaction(transaction);
 
-                var blockAsByteArray = Encoding.UTF8.GetBytes(blockJson);
-
-                channel.BasicPublish(exchange: "",
-                                 routingKey: NetworkConstants.BlocksQueue,
-                                 basicProperties: null,
-                                 body: blockAsByteArray);
-            }
-        }
-
-        public void PushNewValidTransaction(Transaction transaction)
-        {
-
-        }
-
-        public void OpenConnection()
-        {
-            _connection = _connectionFactory.CreateConnection();
-        }
-
-
-        private ConnectionFactory SetConeectionFactory()
-        {
-            var connectionFactory = new ConnectionFactory
-            {
-                HostName = "localhost",
-                UserName = "chain-node",
-                Password = "Password1",
-                Port = 5672,
-            };
-
-            return connectionFactory;
-        }
     }
 }

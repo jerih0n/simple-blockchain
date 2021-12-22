@@ -4,6 +4,7 @@ using Blockchain.Node.Configuration;
 using Blockchain.Node.Logic.Cache;
 using Blockchain.Utils.Cryptography.Node;
 using Newtonsoft.Json;
+using System;
 using System.IO;
 
 namespace Blockchain.Node.Logic.LocalConnectors
@@ -108,10 +109,13 @@ namespace Blockchain.Node.Logic.LocalConnectors
 
         private NodeDatabase InitializeNewNode()
         {
+            Random randomNumber = new Random();
+            var sex = (short)randomNumber.Next(0, 2);
+
             return new NodeDatabase()
             {
                 NodeId = NodeIdGenerator.GenerateNodeId(),
-                ConnectionIP = $"{_nodeConfiguration.NodeIp}:{_nodeConfiguration.NodePort}"
+                Sex = sex //HA :D 0 for male 1 for female, generated at random, determinating the read/writte network chanels
             };
         }
 

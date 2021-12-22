@@ -3,7 +3,7 @@ using System;
 
 namespace Blockchain.Networking.Clients
 {
-    internal abstract class NodeNetworkBase : IDisposable
+    public abstract class NodeNetworkBase : IDisposable
     {
         protected readonly ConnectionFactory _connectionFactory;
         protected IConnection _connection;
