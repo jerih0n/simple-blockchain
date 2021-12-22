@@ -18,17 +18,14 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
         private readonly BlockchainLocalDataConnector _blockchainLocalDataConnector;
         private readonly BlockRewardProccessor _blockRewardProccessor;
         private readonly bool _continueMining;
-        private readonly NodePeerServer _nodePeerServer;
 
         public BlockMinerProcessor(NodeLocalDataConnector nodelocalDataConnector,
             BlockchainLocalDataConnector blockchainLocalDataConnector,
-            BlockRewardProccessor blockRewardProccessor,
-            NodePeerServer nodePeerServer)
+            BlockRewardProccessor blockRewardProccessor)
         {
             _nodeLocalDataConnector = nodelocalDataConnector;
             _blockchainLocalDataConnector = blockchainLocalDataConnector;
             _blockRewardProccessor = blockRewardProccessor;
-            _nodePeerServer = nodePeerServer;
             _continueMining = true;
         }
 
@@ -144,7 +141,7 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
 
         private void PublishNewBlock(Block block)
         {
-            _nodePeerServer.PushNewBlock(block);
+            
         }
     }
 }

@@ -7,13 +7,12 @@ using System.Text;
 
 namespace Blockchain.Networking.Server
 {
-    public class NodePeerServer : IDisposable
-    {
-        
+    public class NetworkConnectionService : IDisposable
+    {       
         private readonly ConnectionFactory _connectionFactory;
         private IConnection _connection;
 
-        public NodePeerServer()
+        public NetworkConnectionService()
         {
             _connectionFactory = SetConeectionFactory();
             OpenConnection();
@@ -24,7 +23,6 @@ namespace Blockchain.Networking.Server
             _connection.Close();
             _connection.Dispose(); 
         }
-
 
         public void PushNewBlock(Block block)
         {
@@ -46,7 +44,6 @@ namespace Blockchain.Networking.Server
                                  basicProperties: null,
                                  body: blockAsByteArray);
             }
-            
         }
 
         public void PushNewValidTransaction(Transaction transaction)
