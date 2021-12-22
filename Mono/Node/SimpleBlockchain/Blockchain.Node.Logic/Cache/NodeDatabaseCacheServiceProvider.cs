@@ -37,5 +37,15 @@ namespace Blockchain.Node.Logic.Cache
             }
             return privateKey;
         }
+
+        public string GetNodeId()
+        {
+            var nodeDatabase = _memoryCache.Get<NodeDatabase>(_nodeDatabaseCacheKey);
+            if(nodeDatabase == null)
+            {
+                throw new System.Exception("Node is not initialized");
+            }
+            return nodeDatabase.NodeId;
+        }
     }
 }

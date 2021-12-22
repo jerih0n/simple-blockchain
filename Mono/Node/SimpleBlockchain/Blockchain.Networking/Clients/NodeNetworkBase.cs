@@ -15,8 +15,9 @@ namespace Blockchain.Networking.Clients
         }
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
             _connection.Close();
-            _connection.Dispose();
+            _connection.Dispose();           
         }
 
         public void OpenConnection()

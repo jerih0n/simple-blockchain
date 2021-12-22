@@ -143,7 +143,6 @@ namespace Blockchain.Node.CLI.CommandInterfaces
                 Console.WriteLine($"Starting from last block with Id {lastBlock.Id} and hash {lastBlock.BlockHash}");
                 Console.ForegroundColor = ConsoleColor.White;
             }
-            
             await _blockMiner.StartMining(_nodeLocalDataConnector.GetPrivateKey());
         }
        

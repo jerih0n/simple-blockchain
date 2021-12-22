@@ -8,6 +8,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Numerics;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blockchain.Node.Logic.Algorithms.PoW
@@ -17,21 +18,27 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
         private readonly NodeLocalDataConnector _nodeLocalDataConnector;
         private readonly BlockchainLocalDataConnector _blockchainLocalDataConnector;
         private readonly BlockRewardProccessor _blockRewardProccessor;
+        private readonly NetworkConnectionService _networkConnectionService;
         private readonly bool _continueMining;
+        private bool _checkNewBlock;
 
         public BlockMinerProcessor(NodeLocalDataConnector nodelocalDataConnector,
             BlockchainLocalDataConnector blockchainLocalDataConnector,
-            BlockRewardProccessor blockRewardProccessor)
+            BlockRewardProccessor blockRewardProccessor,
+            NetworkConnectionService networkConnectionService)
         {
             _nodeLocalDataConnector = nodelocalDataConnector;
             _blockchainLocalDataConnector = blockchainLocalDataConnector;
             _blockRewardProccessor = blockRewardProccessor;
             _continueMining = true;
+            _checkNewBlock = false;
+            _networkConnectionService = networkConnectionService;
+            _networkConnectionService.NewBlockDataRecieved += NetworkConnectionService_NewBlockDataRecieved;
         }
 
-     
         public async Task StartMining(byte[] privateKey)
         {
+            var nodeId = _nodeLocalDataConnector.GetNodeId();
             string previousHash = string.Empty;
             var lastBlock = _blockchainLocalDataConnector.GetLastBlock();
             int complexity = 0;
@@ -48,9 +55,10 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
                 complexity = lastBlock.NextComplexity;
                 lastBlockId = lastBlock.Id;
             }
-            while(_continueMining)
+            _networkConnectionService.Init(nodeId);
+            while (_continueMining)
             {
-                var newBlock = await Task<Block>.Factory.StartNew(() => MineNewBlock(previousHash, complexity, lastBlockId));
+                var newBlock = await Task<Block>.Factory.StartNew(() => MineNewBlock(previousHash, complexity, lastBlockId, nodeId));
                 newBlock = AddTransactionsToTheNewBlock(newBlock);
                 newBlock = TakeRewardForFindingNewBlock(newBlock, privateKey);
                 newBlock = AddTransactionsToTheNewBlock(newBlock);
@@ -70,7 +78,7 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
 
         }
 
-        private Block MineNewBlock(string previousHash, int complexity, long lastBlockId)
+        private Block MineNewBlock(string previousHash, int complexity, long lastBlockId, string nodeId)
         {
             var previousHashBytes = previousHash.ToByteArray();
             BigInteger previousHashBigIntager = new BigInteger(previousHashBytes);
@@ -93,7 +101,7 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
             }
             stopwatch.Stop();
             var blockTimeSpan = stopwatch.Elapsed;
-            var newBlock = new Block(lastBlockId + 1, hashSolution, incrementor, previousHash, "TODO", complexity, blockTimeSpan, complexity);
+            var newBlock = new Block(lastBlockId + 1, hashSolution, incrementor, previousHash, nodeId, complexity, blockTimeSpan, complexity);
             return newBlock;
            
         }
@@ -139,9 +147,14 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
             return block;
         }
 
-        private void PublishNewBlock(Block block)
+        private void PublishNewBlock(Block block) => _networkConnectionService.PushNewBlock(block);
+       
+        private void NetworkConnectionService_NewBlockDataRecieved(object sender, Networking.EventArgs.NewBlockEventArg e)
         {
-            
+            var blockRecieved = e.Block.BlockHash;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"New block with hash {blockRecieved} mined by {e.Block.Node} gotted!");
+            Console.ForegroundColor = ConsoleColor.Green;
         }
     }
 }

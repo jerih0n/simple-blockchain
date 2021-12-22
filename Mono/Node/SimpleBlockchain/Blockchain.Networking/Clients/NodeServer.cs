@@ -13,9 +13,10 @@ namespace Blockchain.Networking.Clients
         public NodeServer(int nodeSex)
         {
             _sex = nodeSex;
+            Console.WriteLine("DEGUT Node Server SEX IS " + _sex);
             _newBlockExchangeName = string.Format(_newBlockExchangeName, _sex);
         }
-        public void PushNewBlock(Block block) => PushToNetwork(block, "", NetworkPushType.Exchange, "");
+        public void PushNewBlock(Block block) => PushToNetwork(block, _newBlockExchangeName, NetworkPushType.Exchange, "");
         public void PushValidatedTransaction(Transaction transaction) => PushToNetwork(transaction, "", NetworkPushType.Queue, null);
 
         private void PushToNetwork<T>(T data, string exchangeName, NetworkPushType networkPushType, string notifyMessage = null)

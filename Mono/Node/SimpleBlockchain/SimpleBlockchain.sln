@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "temp_test", "temp_test\temp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Network", "Network", "{DE84AA95-F3B4-4D10-94B1-B0F4B5A1474E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Networking", "Blockchain.Networking\Blockchain.Networking.csproj", "{7195E256-4FA4-4376-A9DF-CBCF157120AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain.Networking", "Blockchain.Networking\Blockchain.Networking.csproj", "{7195E256-4FA4-4376-A9DF-CBCF157120AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

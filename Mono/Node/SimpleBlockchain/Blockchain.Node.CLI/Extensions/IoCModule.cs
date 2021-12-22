@@ -1,5 +1,6 @@
 ﻿using Blockchain.Cryptography.EllipticCurve;
 using Blockchain.Cryptography.Transactions;
+using Blockchain.Networking;
 using Blockchain.Networking.Server;
 using Blockchain.Node.CLI.CommandInterfaces;
 using Blockchain.Node.CLI.Processors;
@@ -26,6 +27,7 @@ namespace Blockchain.Node.CLI.Extensions
             services.AddSingleton<BlockRewardProccessor>();
             services.AddSingleton<TransactionManager>();
             services.AddSingleton<EllipticCurveProcessor>();
+            services.RegisterNetworkModule();
             //services.AddSingleton<NodePeerServer>();
         }
     }

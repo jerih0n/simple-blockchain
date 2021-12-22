@@ -107,6 +107,9 @@ namespace Blockchain.Node.Logic.LocalConnectors
             return _cacheServiceProvider.GetPrivateKey();
         }
 
+        public string GetNodeId() => _cacheServiceProvider.GetNodeId();
+
+        
         private NodeDatabase InitializeNewNode()
         {
             Random randomNumber = new Random();
