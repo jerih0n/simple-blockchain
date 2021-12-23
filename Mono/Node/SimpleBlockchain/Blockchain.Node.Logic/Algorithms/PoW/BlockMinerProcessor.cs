@@ -1,6 +1,8 @@
-﻿using Blockchain.Cryptography.Extenstions;
+﻿using Blockchain.Cryptography.Block;
+using Blockchain.Cryptography.Extenstions;
 using Blockchain.Networking.Server;
 using Blockchain.Node.Configuration;
+using Blockchain.Node.Logic.Algorithms.Validation;
 using Blockchain.Node.Logic.LocalConnectors;
 using Blockchain.Utils;
 using System;
@@ -8,7 +10,6 @@ using System.Collections;
 using System.Diagnostics;
 using System.Numerics;
 using System.Security.Cryptography;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blockchain.Node.Logic.Algorithms.PoW
@@ -21,6 +22,9 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
         private readonly NetworkConnectionService _networkConnectionService;
         private readonly bool _continueMining;
         private bool _checkNewBlock;
+        private Block _recievedBlock;
+        private object _lockObj = new object();
+        private object _lockOjc2 = new object();
 
         public BlockMinerProcessor(NodeLocalDataConnector nodelocalDataConnector,
             BlockchainLocalDataConnector blockchainLocalDataConnector,
@@ -31,7 +35,7 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
             _blockchainLocalDataConnector = blockchainLocalDataConnector;
             _blockRewardProccessor = blockRewardProccessor;
             _continueMining = true;
-            _checkNewBlock = false;
+            _checkNewBlock = true;
             _networkConnectionService = networkConnectionService;
             _networkConnectionService.NewBlockDataRecieved += NetworkConnectionService_NewBlockDataRecieved;
         }
@@ -81,17 +85,37 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
         private Block MineNewBlock(string previousHash, int complexity, long lastBlockId, string nodeId)
         {
             var previousHashBytes = previousHash.ToByteArray();
-            BigInteger previousHashBigIntager = new BigInteger(previousHashBytes);
             int incrementor = 1;
-            var sha256 = SHA256.Create();
             string hashSolution = string.Empty;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             while (true)
             {
-                previousHashBigIntager = previousHashBigIntager + incrementor;
-                var possibleBlockHash = sha256.ComputeHash(previousHashBigIntager.ToByteArray());
-                var isValidBlockSolution = IsValidBlockSolution(possibleBlockHash, complexity);
+                lock(_lockOjc2)
+                {
+                    if (!_checkNewBlock)
+                    {
+                        stopwatch.Stop();
+                        if (_recievedBlock != null)
+                        {
+                            //1. Deep copy of the block obj
+                            //2. run new task to check 
+                                //2.1 Block Validation
+                                //2.2 Block Reward Transaction validation
+                                //2.3 All transactions in the block
+                            //if only one of those is not correct is not correct - reject the entire block and continue
+                            //if recieved block is ahead than current last than more than one - sync chain
+                            //if everything is ok - accept the block and record it. Use it as a new block
+
+
+                        }
+                        //new block is recieved!
+                    }
+                }
+               
+
+                var possibleBlockHash = BlockHash.CalculateBlockHash(previousHash, incrementor);
+                var isValidBlockSolution = BlockValidator.IsValidBlockSolution(possibleBlockHash, complexity);
                 if(isValidBlockSolution)
                 {
                     hashSolution = possibleBlockHash.ToHex();
@@ -104,27 +128,6 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
             var newBlock = new Block(lastBlockId + 1, hashSolution, incrementor, previousHash, nodeId, complexity, blockTimeSpan, complexity);
             return newBlock;
            
-        }
-
-        private bool IsValidBlockSolution(byte[] possibleBlockHash, int complexity)
-        {
-            if(complexity > 254)
-            {
-                throw new Exception("Invalid Complexity!");
-            }
-            BitArray bitArray = new BitArray(possibleBlockHash);
-            bool isSolution = false;
-            for(int i = 0; i< complexity; i++ )
-            {
-                isSolution = bitArray[i];
-                if (!isSolution) 
-                {
-                    continue;
-                    // basicaly isSolution is bit => true or false . In order to be a solution need to have 0 value or false
-                };
-                break;
-            }
-            return !isSolution;
         }
 
         private Block AddTransactionsToTheNewBlock(Block newBlock)
@@ -151,9 +154,15 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
        
         private void NetworkConnectionService_NewBlockDataRecieved(object sender, Networking.EventArgs.NewBlockEventArg e)
         {
+            lock(_lockObj)
+            {
+                _checkNewBlock = false;
+                _recievedBlock = e.Block;
+            }
+            
             var blockRecieved = e.Block.BlockHash;
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"New block with hash {blockRecieved} mined by {e.Block.Node} gotted!");
+            Console.WriteLine($"New block with hash {blockRecieved} mined by {e.Block.Node} recieved!");
             Console.ForegroundColor = ConsoleColor.Green;
         }
     }
