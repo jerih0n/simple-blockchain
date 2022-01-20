@@ -14,7 +14,7 @@ namespace Blockchain.Networking
             var sex = random.Next(0, 2);
             // haha 0 for male 1 for female. used to determinate the read/write chanels of the node
 
-            serviceCollection.AddSingleton(x => ActivatorUtilities.CreateInstance<NodeServer>(x,sex));
+            serviceCollection.AddSingleton(x => ActivatorUtilities.CreateInstance<NodeServer>(x, sex));
 
             serviceCollection.AddSingleton(x => ActivatorUtilities.CreateInstance<NodeClient>(x, sex));
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Blockchain.Node.CLI
 {
-    class Program
+    public class Program
     {
         static async Task Main(string[] args)
         {

@@ -2,7 +2,6 @@
 using Blockchain.Networking.EventArgs;
 using Blockchain.Utils;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blockchain.Networking.Server
@@ -48,7 +47,6 @@ namespace Blockchain.Networking.Server
 
                 //fire event
                 NewBlockDataRecieved(sender, e);
-
             }     
         }
     }
