@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Numerics;
+using System.Collections.Generic;
 
 namespace Blockchain.Utils
 {
@@ -14,28 +14,13 @@ namespace Blockchain.Utils
             TimeSpan blockTime,
             int nextComplexity)
         {
-            Id = id;
-            BlockHash = blockHash;
-            Nonce = nonce;
-            PreviousBlockHash = previousBlockHash;
-            Node = node;
-            Complexity = complexity;
-            MinedAt = DateTime.UtcNow;
-            BlockTime = blockTime;
-            NextComplexity = nextComplexity;
-            BlockHeader = new BlockHeader();
-
+            BlockHeader = new BlockHeader(id, blockHash, nonce, previousBlockHash, node, complexity, blockTime, nextComplexity);
+            Transactions = new List<Transaction>();
         }
+
         public BlockHeader BlockHeader { get; }
-        public long Id { get; }
-        public string BlockHash { get; }
-        public long Nonce { get; }
-        public string PreviousBlockHash { get; }
-        public string Node { get; }
-        public int Complexity { get; }
-        public DateTime MinedAt { get; }
-        public TimeSpan BlockTime { get; }
-        public int NextComplexity { get; }
-        public decimal CirculatingSupply { get; }
+
+        public Transaction RewardTransaction { get; set; }
+        public List<Transaction> Transactions { get; set; }
     }
 }

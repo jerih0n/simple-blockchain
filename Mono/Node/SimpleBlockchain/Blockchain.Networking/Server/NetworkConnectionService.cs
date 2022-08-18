@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 namespace Blockchain.Networking.Server
 {
     public class NetworkConnectionService : IDisposable
-    {       
+    {
         private readonly NodeServer _nodeServer;
         private readonly NodeClient _nodeClient;
         private string _nodeId;
+
         public NetworkConnectionService(NodeServer nodeServer, NodeClient nodeClient)
         {
             _nodeServer = nodeServer;
@@ -25,7 +26,7 @@ namespace Blockchain.Networking.Server
             _nodeServer.Dispose();
             _nodeClient.Dispose();
         }
-        
+
         public void Init(string nodeId)
         {
             _nodeId = nodeId;
@@ -40,14 +41,14 @@ namespace Blockchain.Networking.Server
 
         private void _nodeClient_NewBlockDataRecieved(object sender, NewBlockEventArg e)
         {
-            if (e.Block.Node != _nodeId)
+            if (e.Block.BlockHeader.Node != _nodeId)
             {
                 //resend the new block to the network
                 //_nodeServer.PushNewBlock(e.Block);
 
                 //fire event
                 NewBlockDataRecieved(sender, e);
-            }     
+            }
         }
     }
 }

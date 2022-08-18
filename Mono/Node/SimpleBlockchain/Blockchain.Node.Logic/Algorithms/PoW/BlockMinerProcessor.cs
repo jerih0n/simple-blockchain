@@ -55,76 +55,76 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
             }
             else
             {
-                previousHash = lastBlock.BlockHash;
-                complexity = lastBlock.NextComplexity;
-                lastBlockId = lastBlock.Id;
+                previousHash = lastBlock.BlockHeader.BlockHash;
+                complexity = lastBlock.BlockHeader.NextComplexity;
+                lastBlockId = lastBlock.BlockHeader.Id;
                 _lastMinedBlock = lastBlock;
             }
             _networkConnectionService.Init(nodeId);
             while (_continueMining)
             {
                 var (newBlock, isMindedBlock) = await Task<(Block, bool)>.Factory.StartNew(() => MineNewBlock(previousHash, complexity, lastBlockId, nodeId));
-                
-                if(isMindedBlock)
+
+                if (isMindedBlock)
                 {
                     CreateNewBlock(newBlock, privateKey);
                     //Take block reward - mint new token
                     //Notify nodes
                     //TODO: for now console write line
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"new block found with hash {newBlock.BlockHash} block time {newBlock.BlockTime}");
-                    previousHash = newBlock.BlockHash;
-                    complexity = newBlock.NextComplexity;
-                    lastBlockId = newBlock.Id;
+                    Console.WriteLine($"new block found with hash {newBlock.BlockHeader.BlockHash} block time {newBlock.BlockHeader.BlockTime}");
+                    previousHash = newBlock.BlockHeader.BlockHash;
+                    complexity = newBlock.BlockHeader.NextComplexity;
+                    lastBlockId = newBlock.BlockHeader.Id;
                     Console.ForegroundColor = ConsoleColor.Cyan;
                     _lastMinedBlock = newBlock;
                 }
                 else
                 {
-                    if(ValidateBlock(newBlock))
+                    if (ValidateBlock(newBlock))
                     {
                         RecordInLocalDb(newBlock);
                         Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine($"new block ACCEPTED with hash {newBlock.BlockHash} block time {newBlock.BlockTime} from node {newBlock.Node}");
+                        Console.WriteLine($"new block ACCEPTED with hash {newBlock.BlockHeader.BlockHash} block time {newBlock.BlockHeader.BlockTime} from node {newBlock.BlockHeader.Node}");
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                        previousHash = newBlock.BlockHash;
-                        complexity = newBlock.NextComplexity;
-                        lastBlockId = newBlock.Id;
+                        previousHash = newBlock.BlockHeader.BlockHash;
+                        complexity = newBlock.BlockHeader.NextComplexity;
+                        lastBlockId = newBlock.BlockHeader.Id;
                     }
                     else
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"block REJECTED with hash {newBlock.BlockHash} block time {newBlock.BlockTime} from node {newBlock.Node}");
+                        Console.WriteLine($"block REJECTED with hash {newBlock.BlockHeader.BlockHash} block time {newBlock.BlockHeader.BlockTime} from node {newBlock.BlockHeader.Node}");
                         Console.ForegroundColor = ConsoleColor.Cyan;
                     }
                 }
             }
         }
+
         private (Block, bool) MineNewBlock(string previousHash, int complexity, long lastBlockId, string nodeId)
         {
             var previousHashBytes = previousHash.ToByteArray();
             int incrementor = 1;
             string hashSolution = string.Empty;
             Stopwatch stopwatch = new Stopwatch();
-            
+
             while (true)
             {
-                lock(_lockOjc2)
+                lock (_lockOjc2)
                 {
                     if (_recievedBlocks.Count > 0)
                     {
                         var lastBlock = _recievedBlocks.OrderBy(x => x.Key).FirstOrDefault();
                         _recievedBlocks.Clear();
-                        if(lastBlock.Key >= lastBlockId) 
-                        { 
+                        if (lastBlock.Key >= lastBlockId)
+                        {
                             //new block
-                            if(lastBlock.Key > lastBlockId +1)
+                            if (lastBlock.Key > lastBlockId + 1)
                             {
                                 //difference is bigger than 1 block sync is required
-                                //TODO: 
+                                //TODO:
                             }
                             return (lastBlock.Value, false);
-
                         }
                     }
                 }
@@ -137,14 +137,12 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
                     break;
                 }
                 incrementor++;
-
             }
 
             stopwatch.Stop();
             var blockTimeSpan = stopwatch.Elapsed;
             var newBlock = new Block(lastBlockId + 1, hashSolution, incrementor, previousHash, nodeId, complexity, blockTimeSpan, complexity);
             return (newBlock, true);
-           
         }
 
         private Block AddTransactionsToTheNewBlock(Block newBlock)
@@ -160,25 +158,25 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
 
         private Block TakeRewardForFindingNewBlock(Block block, byte[] privateKey)
         {
-            var rewardingTransaction = _blockRewardProccessor.CreateNewRewardTransaction(block.BlockHash, privateKey);
+            var rewardingTransaction = _blockRewardProccessor.CreateNewRewardTransaction(block.BlockHeader.BlockHash, privateKey);
             rewardingTransaction.TransactionStatus = TransactionStatusEnum.Success;
             rewardingTransaction.IsVerified = true;
-            block.BlockHeader.RewardTransaction = rewardingTransaction;
+            block.RewardTransaction = rewardingTransaction;
             return block;
         }
 
         private void PublishNewBlock(Block block) => _networkConnectionService.PushNewBlock(block);
-       
+
         private void NetworkConnectionService_NewBlockDataRecieved(object sender, Networking.EventArgs.NewBlockEventArg e)
         {
-            lock(_lockObj)
+            lock (_lockObj)
             {
-                _recievedBlocks.TryAdd(e.Block.Id, e.Block);
+                _recievedBlocks.TryAdd(e.Block.BlockHeader.Id, e.Block);
             }
-            
-            var blockRecieved = e.Block.BlockHash;
+
+            var blockRecieved = e.Block.BlockHeader.BlockHash;
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"New block with hash {blockRecieved} mined by {e.Block.Node} recieved!");
+            Console.WriteLine($"New block with hash {blockRecieved} mined by {e.Block.BlockHeader.Node} recieved!");
             Console.ForegroundColor = ConsoleColor.Green;
         }
 
@@ -190,6 +188,7 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
             PublishNewBlock(newBlock);
             RecordInLocalDb(newBlock);
         }
+
         private bool ValidateBlock(Block block)
         {
             var blockValidationStatus = BlockValidator.ValidateRecievedBlock(block, _lastMinedBlock);

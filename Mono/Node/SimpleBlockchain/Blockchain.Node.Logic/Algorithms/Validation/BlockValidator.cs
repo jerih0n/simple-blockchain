@@ -10,24 +10,24 @@ namespace Blockchain.Node.Logic.Algorithms.Validation
     {
         public static AfterBlockValidationAction ValidateRecievedBlock(Block previousBlock, Block newBlock)
         {
-            if(previousBlock.Id >= newBlock.Id)
+            if (previousBlock.BlockHeader.Id >= newBlock.BlockHeader.Id)
             {
                 return AfterBlockValidationAction.Reject;
             }
-            if(newBlock.Id - previousBlock.Id > 1)
+            if (newBlock.BlockHeader.Id - previousBlock.BlockHeader.Id > 1)
             {
                 return AfterBlockValidationAction.RequestChainSynchronization;
             }
 
-            var lastBlockHash = previousBlock.BlockHash;
-            var expectedNewBlockHash = BlockHash.CalculateBlockHash(lastBlockHash, newBlock.Nonce);
-            var isValidBlockSolution = IsValidBlockSolution(expectedNewBlockHash, previousBlock.NextComplexity);
-            if(!isValidBlockSolution)
+            var lastBlockHash = previousBlock.BlockHeader.BlockHash;
+            var expectedNewBlockHash = BlockHash.CalculateBlockHash(lastBlockHash, newBlock.BlockHeader.Nonce);
+            var isValidBlockSolution = IsValidBlockSolution(expectedNewBlockHash, previousBlock.BlockHeader.NextComplexity);
+            if (!isValidBlockSolution)
             {
                 return AfterBlockValidationAction.Reject;
             }
 
-            if(newBlock.BlockHash != expectedNewBlockHash.ToHex())
+            if (newBlock.BlockHeader.BlockHash != expectedNewBlockHash.ToHex())
             {
                 return AfterBlockValidationAction.Reject;
             }

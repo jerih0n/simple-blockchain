@@ -141,7 +141,7 @@ namespace Blockchain.Node.CLI.CommandInterfaces
             if (lastBlock != null)
             {
                 System.Console.ForegroundColor = ConsoleColor.Green;
-                System.Console.WriteLine($"Starting from last block with Id {lastBlock.Id} and hash {lastBlock.BlockHash}");
+                System.Console.WriteLine($"Starting from last block with Id {lastBlock.BlockHeader.Id} and hash {lastBlock.BlockHeader.BlockHash}");
                 System.Console.ForegroundColor = ConsoleColor.White;
             }
             await _blockMiner.StartMining(_nodeLocalDataConnector.GetPrivateKey());

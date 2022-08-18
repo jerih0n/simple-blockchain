@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain.Networking", "Bl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain.Node.CLI", "Blockchain.Node.Console\Blockchain.Node.CLI.csproj", "{CB94808D-A9A1-41B4-98F7-73A94F8A22AF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wallet", "Wallet", "{AD4C1893-F52D-4621-8F0D-322183D5B65B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
