@@ -33,14 +33,12 @@ namespace Blockchain.Node.Logic.LocalConnectors
 
             if (!File.Exists(_nodeDbFile))
             {
-                //create new one 
+                //create new one
 
                 Directory.CreateDirectory(_nodeConfiguration.NodeLocalDbPath);
                 using (File.Create(_nodeDbFile))
                 {
-
                 }
-                
             }
             using (var streamReaded = new StreamReader(_nodeDbFile))
             {
@@ -50,17 +48,16 @@ namespace Blockchain.Node.Logic.LocalConnectors
 
             if (nodeDatabase == null)
             {
-                // no data is recorded 
+                // no data is recorded
                 //init emtpy record InitializeEmptykLocalBlockchain();
                 nodeDatabase = InitializeNewNode();
 
-                using(var streamWriter = new StreamWriter(_nodeDbFile))
+                using (var streamWriter = new StreamWriter(_nodeDbFile))
                 {
                     streamWriter.WriteLine(JsonConvert.SerializeObject(nodeDatabase));
                 }
-
             }
-            if(!string.IsNullOrEmpty(nodeDatabase.PrivateKeyEncrypted))
+            if (!string.IsNullOrEmpty(nodeDatabase.PrivateKeyEncrypted))
             {
                 _isNodeSet = true;
             }
@@ -77,11 +74,11 @@ namespace Blockchain.Node.Logic.LocalConnectors
             using (var streamReaded = new StreamReader(_nodeDbFile))
             {
                 var nodeDatabaseAsString = streamReaded.ReadToEnd();
-                 nodeDatabase = JsonConvert.DeserializeObject<NodeDatabase>(nodeDatabaseAsString);
+                nodeDatabase = JsonConvert.DeserializeObject<NodeDatabase>(nodeDatabaseAsString);
             }
 
             nodeDatabase.PrivateKeyEncrypted = encryptedPrivateKey;
-            using(var streamWritter = new StreamWriter(_nodeDbFile))
+            using (var streamWritter = new StreamWriter(_nodeDbFile))
             {
                 streamWritter.WriteLine(JsonConvert.SerializeObject(nodeDatabase));
             }
@@ -89,17 +86,18 @@ namespace Blockchain.Node.Logic.LocalConnectors
             _nodeDatabase.PrivateKeyEncrypted = encryptedPrivateKey;
         }
 
-        public bool IsNodeSet { get { return _isNodeSet; } }
+        public bool IsNodeSet
+        { get { return _isNodeSet; } }
 
         public bool AddPrivateKeyInMemory(string password)
         {
-            if(string.IsNullOrEmpty(_nodeDatabase.PrivateKeyEncrypted))
+            if (string.IsNullOrEmpty(_nodeDatabase.PrivateKeyEncrypted))
             {
                 throw new System.Exception("Node has no prive key set");
             }
             var decryptedPrivateKey = AESEncryptionProvider.Decrypt(_nodeDatabase.PrivateKeyEncrypted, password);
             _cacheServiceProvider.AddPrivateKey(decryptedPrivateKey.ToByteArray());
-            return true ;  
+            return true;
         }
 
         public byte[] GetPrivateKey()
@@ -109,7 +107,6 @@ namespace Blockchain.Node.Logic.LocalConnectors
 
         public string GetNodeId() => _cacheServiceProvider.GetNodeId();
 
-        
         private NodeDatabase InitializeNewNode()
         {
             Random randomNumber = new Random();
@@ -121,8 +118,5 @@ namespace Blockchain.Node.Logic.LocalConnectors
                 Sex = sex //HA :D 0 for male 1 for female, generated at random, determinating the read/writte network chanels
             };
         }
-
-        
-
     }
 }

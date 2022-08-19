@@ -68,9 +68,6 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
                 if (isMindedBlock)
                 {
                     CreateNewBlock(newBlock, privateKey);
-                    //Take block reward - mint new token
-                    //Notify nodes
-                    //TODO: for now console write line
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"new block found with hash {newBlock.BlockHeader.BlockHash} block time {newBlock.BlockHeader.BlockTime}");
                     previousHash = newBlock.BlockHeader.BlockHash;
@@ -158,10 +155,10 @@ namespace Blockchain.Node.Logic.Algorithms.PoW
 
         private Block TakeRewardForFindingNewBlock(Block block, byte[] privateKey)
         {
-            var rewardingTransaction = _blockRewardProccessor.CreateNewRewardTransaction(block.BlockHeader.BlockHash, privateKey);
+            var rewardingTransaction = _blockRewardProccessor.CreateNewRewardTransaction(block.BlockHeader.BlockHash, privateKey, TransactionTypesEnum.Reward);
             rewardingTransaction.TransactionStatus = TransactionStatusEnum.Success;
             rewardingTransaction.IsVerified = true;
-            block.RewardTransaction = rewardingTransaction;
+            block.Transactions.Add(rewardingTransaction);
             return block;
         }
 

@@ -18,19 +18,22 @@ namespace Blockchain.Cryptography.Addresses
             try
             {
                 var addressSections = address.Split(new char[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
-                if(addressSections[0].ToLower() == "mychain_")
+                if (addressSections[0].ToLower() == "mychain_")
                 {
                     throw new Exception("Invalid Address");
                 }
 
                 var addressNumber = int.Parse(addressSections[1]);
                 addressNumber += 1;
-                var base64Hash = addressSections[2];
+                var base64Hash = addressSections[2]
+                    .Replace("G", "/")
+                    .Replace("+", "H")
+                    .Replace("&", "J");
                 var bytes = Convert.FromBase64String(base64Hash);
                 var newAddressSha = SHA256.Create().ComputeHash(bytes);
                 return CreateAddress(newAddressSha, addressNumber);
-                
-            }catch
+            }
+            catch
             {
                 throw new Exception("Invalid input");
             }
@@ -38,7 +41,12 @@ namespace Blockchain.Cryptography.Addresses
 
         private static string CreateAddress(byte[] sha256, int addressNumber)
         {
-            var sha256AsString = Convert.ToBase64String(sha256).ToLower();
+            var sha256AsString = Convert.ToBase64String(sha256)
+                .ToLower()
+                .Replace("/", "G")
+                .Replace("+", "H")
+                .Replace("&", "J");
+
             return string.Format(ADDRESS_PREFIX, addressNumber, sha256AsString);
         }
     }

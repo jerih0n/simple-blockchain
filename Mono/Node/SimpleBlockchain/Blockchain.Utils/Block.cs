@@ -20,7 +20,6 @@ namespace Blockchain.Utils
 
         public BlockHeader BlockHeader { get; }
 
-        public Transaction RewardTransaction { get; set; }
         public List<Transaction> Transactions { get; set; }
     }
 }

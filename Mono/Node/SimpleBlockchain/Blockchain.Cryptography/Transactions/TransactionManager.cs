@@ -8,18 +8,25 @@ namespace Blockchain.Cryptography.Transactions
     public class TransactionManager
     {
         private readonly EllipticCurveProcessor _ellipticCurveProcessor;
+
         public TransactionManager(EllipticCurveProcessor ellipticCurveProcessor)
         {
             _ellipticCurveProcessor = ellipticCurveProcessor;
         }
-        public Transaction CreateRawTransaction(string fromAddress, string toAddress, long amount, long fee)
+
+        public Transaction CreateRawTransaction(string fromAddress,
+            string toAddress, long amount,
+            long fee,
+            TransactionTypesEnum transactionTypes,
+            long fromAddressBalance,
+            long toAddressBalance)
         {
             //add signiture
             var transactionHash = $"{fromAddress}_{toAddress}_{amount}_{DateTime.UtcNow.ToString()}"
                 .Sha256Utf8String()
                 .ToHex();
 
-            return new Transaction(transactionHash, fromAddress, toAddress, amount, fee);
+            return new Transaction(transactionHash, fromAddress, toAddress, amount, fee, transactionTypes, fromAddressBalance, toAddressBalance);
         }
 
         public Transaction SignTransaction(Transaction transaction, byte[] privateKey)

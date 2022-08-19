@@ -4,7 +4,9 @@ using Blockchain.Utils;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Blockchain.Node.Logic.LocalConnectors
 {
@@ -28,32 +30,29 @@ namespace Blockchain.Node.Logic.LocalConnectors
             BlockchainModel blockchain = null;
             if (!File.Exists(_blockchainFile))
             {
-                //create new one 
-               
+                //create new one
+
                 Directory.CreateDirectory(_localDbFilePath);
                 using (File.Create(_blockchainFile))
                 {
-
                 }
-                
             }
-            using(var streamReaded = new StreamReader(_blockchainFile))
+            using (var streamReaded = new StreamReader(_blockchainFile))
             {
                 var blockchainAsString = streamReaded.ReadToEnd();
                 blockchain = JsonConvert.DeserializeObject<BlockchainModel>(blockchainAsString);
             }
 
-            if(blockchain == null || blockchain.Blocks == null || blockchain.Blocks.Count == 0)
+            if (blockchain == null || blockchain.Blocks == null || blockchain.Blocks.Count == 0)
             {
-                // no data is recorded 
+                // no data is recorded
                 //init emtpy record InitializeEmptykLocalBlockchain();
-               blockchain = InitializeEmptykLocalBlockchain();
-                
+                blockchain = InitializeEmptykLocalBlockchain();
             }
             _cacheServiceProvider.LoadBlockchainInMemory(blockchain);
 
             return true;
-            //find last block in local copy 
+            //find last block in local copy
         }
 
         public Block GetLastBlock()
@@ -61,19 +60,51 @@ namespace Blockchain.Node.Logic.LocalConnectors
             return _cacheServiceProvider.GetLastBlock();
         }
 
+        public Transaction GetLastTransactionForAddress(string address)
+        {
+            var allBlokcs = _cacheServiceProvider.GetEntireBlockchain().Blocks;
+
+            for (int i = allBlokcs.Count - 1; i >= 0; i--)
+            {
+                if (allBlokcs[i].Transactions.Any(x => x.FromAddress.ToLower() == address.ToLower() || x.ToAddress.ToLower() == address.ToLower()))
+                {
+                    var lastTransaction = allBlokcs[i]
+                        .Transactions.OrderByDescending(x => x.Created)
+                        .Where(x => x.FromAddress.ToLower() == address.ToLower() || x.ToAddress.ToLower() == address.ToLower())
+                        .FirstOrDefault();
+
+                    if (lastTransaction != null)
+                    {
+                        return lastTransaction;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        //public Transaction GetAllOutgoingTransactionsForAddress(string address)
+        //{
+        //    var allBlokcs = _cacheServiceProvider.GetEntireBlockchain().Blocks
+        //        .Select(x => x.Transactions)
+        //        .Where(y => y.Select(x => x.FromAddress == address).ToList())
+        //}
+
+        //public Transaction GetAllIncommingTransactionsPerAddress(string address)
+        //{
+        //}
         public void AddNewBlock(Block newBlock)
         {
             _cacheServiceProvider.InsertNewBlock(newBlock);
             var blockchain = _cacheServiceProvider.GetEntireBlockchain();
 
-            lock(_lock)
+            lock (_lock)
             {
                 using (var writter = new StreamWriter(_blockchainFile))
                 {
                     writter.WriteLine(JsonConvert.SerializeObject(blockchain));
                 }
             }
-           
         }
 
         private BlockchainModel InitializeEmptykLocalBlockchain()
@@ -86,17 +117,6 @@ namespace Blockchain.Node.Logic.LocalConnectors
             }
 
             return newBlockchainLocalRecord;
-        }
-
-        
-        //After insertion in memory first
-        private void InsertNewBlockInLocalStorage(Block newBlock)
-        {
-            var blockchain = _cacheServiceProvider.GetEntireBlockchain();
-            if(blockchain != null)
-            {
-                blockchain.Blocks.Add(newBlock);
-            }
         }
     }
 }
