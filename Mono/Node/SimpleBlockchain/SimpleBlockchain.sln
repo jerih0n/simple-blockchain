@@ -33,7 +33,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain.Node.CLI", "Bloc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wallet", "Wallet", "{AD4C1893-F52D-4621-8F0D-322183D5B65B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain.Wallet", "Blockchain.Wallet\Blockchain.Wallet.csproj", "{78EE67EB-12CE-483C-8EB0-45988886C016}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain.Wallet", "Blockchain.Wallet\Blockchain.Wallet.csproj", "{78EE67EB-12CE-483C-8EB0-45988886C016}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F44AADB7-C13F-40E2-9FE4-27851EBEC581}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

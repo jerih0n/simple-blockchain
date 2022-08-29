@@ -5,20 +5,30 @@ namespace Blockchain.Utils
 {
     public sealed class Block
     {
-        public Block(long id,
-            string blockHash,
-            long nonce,
-            string previousBlockHash,
-            string node,
-            int complexity,
-            TimeSpan blockTime,
-            int nextComplexity)
+        public Block(long Id,
+            string BlockHash,
+            long Nonce,
+            string PreviousBlockHash,
+            string Node,
+            int Complexity,
+            TimeSpan BlockTime,
+            int NextComplexity)
         {
-            BlockHeader = new BlockHeader(id, blockHash, nonce, previousBlockHash, node, complexity, blockTime, nextComplexity);
+            BlockHeader = new BlockHeader
+            {
+                Id = Id,
+                BlockHash = BlockHash,
+                Nonce = Nonce,
+                PreviousBlockHash = PreviousBlockHash,
+                Node = Node,
+                Complexity = Complexity,
+                BlockTime = BlockTime,
+                NextComplexity = NextComplexity
+            };
             Transactions = new List<Transaction>();
         }
 
-        public BlockHeader BlockHeader { get; }
+        public BlockHeader BlockHeader { get; set; }
 
         public List<Transaction> Transactions { get; set; }
     }

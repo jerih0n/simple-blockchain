@@ -1,4 +1,6 @@
-﻿using Blockchain.Wallet.NodeConnection;
+﻿using Blockchain.Wallet.Components;
+using Blockchain.Wallet.NodeConnection;
+using Blockchain.Wallet.Services;
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
@@ -9,6 +11,9 @@ namespace Blockchain.Wallet
     public partial class MainForm : Form
     {
         private readonly NodeHttpClient _nodeHttpClient;
+        private readonly LocalDbService _localDbService;
+        private readonly SetWalletControl _setWalletControl;
+        private WalletInformation _walletInformation;
 
         private Panel mainInfoPanel;
         private Panel mainInteractionPanel;
@@ -18,12 +23,18 @@ namespace Blockchain.Wallet
         private Button refreshConnectionBtn;
         private Label nodeInformation;
         private Label label1;
+        private Panel panel2;
         private Panel mainPanel;
 
         public MainForm()
         {
             InitializeComponent();
             _nodeHttpClient = new NodeHttpClient();
+            _localDbService = new LocalDbService();
+            _setWalletControl = new SetWalletControl();
+            _walletInformation = new WalletInformation(_localDbService.Wallet);
+            _walletInformation.OnRefreshBtnClick += _walletInformation_OnRefreshBtnClick;
+            _setWalletControl.OnWalletCreation += _setWalletControl_OnWalletCreation;
             OnLoadAsync();
         }
 
@@ -34,6 +45,7 @@ namespace Blockchain.Wallet
             this.mainPanel = new System.Windows.Forms.Panel();
             this.mainInteractionPanel = new System.Windows.Forms.Panel();
             this.mainInfoPanel = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.statusLb = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -75,11 +87,21 @@ namespace Blockchain.Wallet
             this.mainInfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainInfoPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mainInfoPanel.Controls.Add(this.panel2);
             this.mainInfoPanel.Controls.Add(this.panel1);
             this.mainInfoPanel.Location = new System.Drawing.Point(8, 9);
             this.mainInfoPanel.Name = "mainInfoPanel";
             this.mainInfoPanel.Size = new System.Drawing.Size(944, 135);
             this.mainInfoPanel.TabIndex = 0;
+            //
+            // panel2
+            //
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.Location = new System.Drawing.Point(3, 55);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(936, 65);
+            this.panel2.TabIndex = 4;
             //
             // panel1
             //
@@ -159,11 +181,26 @@ namespace Blockchain.Wallet
         private async Task OnLoadAsync()
         {
             this.refreshConnectionBtn.Enabled = false;
+
+            if (_localDbService.Wallet == null || string.IsNullOrEmpty(_localDbService.Wallet.PrivateKeyEnc))
+            {
+                this.panel2.Controls.Add(_setWalletControl);
+            }
+            else
+            {
+                this.panel2.Controls.Add(_walletInformation);
+            }
             await PingNode();
         }
 
         private void refreshConnectionBtn_Click(object sender, EventArgs e)
         {
+        }
+
+        private void _walletInformation_OnRefreshBtnClick(object? sender, EventArgs e)
+        {
+            this.panel2.Controls.Clear();
+            this.panel2.Controls.Add(_setWalletControl);
         }
 
         private async Task PingNode()
@@ -181,6 +218,13 @@ namespace Blockchain.Wallet
                 statusLb.Text = "Not Connected";
                 statusLb.ForeColor = Color.Red;
             }
+        }
+
+        private void _setWalletControl_OnWalletCreation(object? sender, EventArgs e)
+        {
+            _walletInformation = new WalletInformation(_localDbService.Wallet);
+            this.panel2.Controls.Clear();
+            this.panel2.Controls.Add(_walletInformation);
         }
     }
 }

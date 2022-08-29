@@ -1,5 +1,6 @@
 ﻿using Blockchain.Utils.Nodes;
 using Blockchain.Wallet.Configuration;
+using Blockchain.Wallet.Models.NodeResponses;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,14 @@ namespace Blockchain.Wallet.NodeConnection
     public class NodeHttpClient
     {
         private const string PingEndpoint = "/ping";
+
+        private const string BalanceEndpoint = "/balance";
         private readonly HttpClient _httpClient;
 
         public NodeHttpClient()
         {
             _httpClient = new HttpClient();
-            _httpClient.Timeout = new TimeSpan(20000000);
+            _httpClient.Timeout = new TimeSpan(40000000);
         }
 
         public async Task<NodeConnectionModel> PingNodeAsync()
@@ -28,6 +31,14 @@ namespace Blockchain.Wallet.NodeConnection
             var result = await _httpClient.GetAsync($"{nodeUrl.NodeUrl}{PingEndpoint}");
 
             return await DeserializeOutput<NodeConnectionModel>(result);
+        }
+
+        public async Task<Balance> GetBalanceForAddressAsync(string address)
+        {
+            var nodeUrl = WalletConfigurationManager.GetNetworkConfiguration();
+            var result = await _httpClient.GetAsync($"{nodeUrl.NodeUrl}{BalanceEndpoint}/{address}");
+
+            return await DeserializeOutput<Balance>(result);
         }
 
         private async Task<T> DeserializeOutput<T>(HttpResponseMessage response)

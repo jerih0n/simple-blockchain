@@ -17,7 +17,7 @@ namespace Blockchain.Node.CLI.Controllers
         }
 
         [HttpGet("{address}")]
-        public IActionResult GetBalance(string address)
+        public IActionResult GetBalance([FromRoute] string address)
         {
             var lastTransaction = _blockchainLocalDataConnector.GetLastTransactionForAddress(address);
 
