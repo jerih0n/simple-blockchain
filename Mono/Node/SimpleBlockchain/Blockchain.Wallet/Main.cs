@@ -24,6 +24,7 @@ namespace Blockchain.Wallet
         private Label nodeInformation;
         private Label label1;
         private Panel panel2;
+        private Panel transactionsPanel;
         private Panel mainPanel;
 
         public MainForm()
@@ -52,15 +53,17 @@ namespace Blockchain.Wallet
             this.refreshConnectionBtn = new System.Windows.Forms.Button();
             this.nodeInformation = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.transactionsPanel = new System.Windows.Forms.Panel();
             this.mainPanel.SuspendLayout();
+            this.mainInteractionPanel.SuspendLayout();
             this.mainInfoPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
-            //
+            // 
             // mainPanel
-            //
-            this.mainPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.mainPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.mainPanel.BackColor = System.Drawing.SystemColors.Control;
@@ -70,21 +73,22 @@ namespace Blockchain.Wallet
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Size = new System.Drawing.Size(959, 401);
             this.mainPanel.TabIndex = 0;
-            //
+            // 
             // mainInteractionPanel
-            //
-            this.mainInteractionPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.mainInteractionPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainInteractionPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.mainInteractionPanel.Controls.Add(this.transactionsPanel);
             this.mainInteractionPanel.Location = new System.Drawing.Point(3, 165);
             this.mainInteractionPanel.Name = "mainInteractionPanel";
             this.mainInteractionPanel.Size = new System.Drawing.Size(949, 226);
             this.mainInteractionPanel.TabIndex = 1;
-            //
+            // 
             // mainInfoPanel
-            //
-            this.mainInfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.mainInfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainInfoPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.mainInfoPanel.Controls.Add(this.panel2);
@@ -93,19 +97,19 @@ namespace Blockchain.Wallet
             this.mainInfoPanel.Name = "mainInfoPanel";
             this.mainInfoPanel.Size = new System.Drawing.Size(944, 135);
             this.mainInfoPanel.TabIndex = 0;
-            //
+            // 
             // panel2
-            //
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.Location = new System.Drawing.Point(3, 55);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(936, 65);
             this.panel2.TabIndex = 4;
-            //
+            // 
             // panel1
-            //
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.statusLb);
             this.panel1.Controls.Add(this.label2);
@@ -116,27 +120,27 @@ namespace Blockchain.Wallet
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(936, 35);
             this.panel1.TabIndex = 3;
-            //
+            // 
             // statusLb
-            //
+            // 
             this.statusLb.AutoSize = true;
             this.statusLb.Location = new System.Drawing.Point(600, 7);
             this.statusLb.Name = "statusLb";
             this.statusLb.Size = new System.Drawing.Size(39, 15);
             this.statusLb.TabIndex = 4;
             this.statusLb.Text = "Status";
-            //
+            // 
             // label2
-            //
+            // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(555, 7);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(39, 15);
             this.label2.TabIndex = 3;
             this.label2.Text = "Status";
-            //
+            // 
             // refreshConnectionBtn
-            //
+            // 
             this.refreshConnectionBtn.Location = new System.Drawing.Point(3, 3);
             this.refreshConnectionBtn.Name = "refreshConnectionBtn";
             this.refreshConnectionBtn.Size = new System.Drawing.Size(75, 23);
@@ -144,36 +148,47 @@ namespace Blockchain.Wallet
             this.refreshConnectionBtn.Text = "Refresh";
             this.refreshConnectionBtn.UseVisualStyleBackColor = true;
             this.refreshConnectionBtn.Click += new System.EventHandler(this.refreshConnectionBtn_Click);
-            //
+            // 
             // nodeInformation
-            //
+            // 
             this.nodeInformation.AutoSize = true;
             this.nodeInformation.Location = new System.Drawing.Point(202, 7);
             this.nodeInformation.Name = "nodeInformation";
             this.nodeInformation.Size = new System.Drawing.Size(38, 15);
             this.nodeInformation.TabIndex = 2;
             this.nodeInformation.Text = "label2";
-            //
+            // 
             // label1
-            //
+            // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(84, 7);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(112, 15);
             this.label1.TabIndex = 1;
             this.label1.Text = "Connected To Node";
-            //
+            // 
+            // transactionsPanel
+            // 
+            this.transactionsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.transactionsPanel.Location = new System.Drawing.Point(12, 15);
+            this.transactionsPanel.Name = "transactionsPanel";
+            this.transactionsPanel.Size = new System.Drawing.Size(506, 194);
+            this.transactionsPanel.TabIndex = 0;
+            // 
             // MainForm
-            //
+            // 
             this.ClientSize = new System.Drawing.Size(968, 406);
             this.Controls.Add(this.mainPanel);
             this.MinimumSize = new System.Drawing.Size(984, 445);
             this.Name = "MainForm";
             this.mainPanel.ResumeLayout(false);
+            this.mainInteractionPanel.ResumeLayout(false);
             this.mainInfoPanel.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
+
         }
 
         #endregion Componnents
