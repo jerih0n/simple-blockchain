@@ -7,6 +7,7 @@ using Blockchain.Node.Configuration;
 using Blockchain.Node.Logic.Algorithms.PoW;
 using Blockchain.Node.Logic.Cache;
 using Blockchain.Node.Logic.LocalConnectors;
+using Blockchain.Node.Logic.MemoryPool;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Blockchain.Node.CLI.Extensions
@@ -27,6 +28,7 @@ namespace Blockchain.Node.CLI.Extensions
             services.AddSingleton<TransactionManager>();
             services.AddSingleton<EllipticCurveProcessor>();
             services.RegisterNetworkModule();
+            services.AddSingleton<IMempool, SimpleMemoryPool>();
             //services.AddSingleton<NodePeerServer>();
         }
     }

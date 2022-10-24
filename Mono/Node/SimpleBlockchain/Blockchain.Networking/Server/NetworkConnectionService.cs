@@ -35,7 +35,7 @@ namespace Blockchain.Networking.Server
 
         public void PushNewBlock(Block block) => _nodeServer.PushNewBlock(block);
 
-        public void PushNewValidTransaction(Transaction transaction) => _nodeServer.PushValidatedTransaction(transaction);
+        public void PushNewTransaction(Transaction transaction) => _nodeServer.PushNewTransaction(transaction);
 
         protected void StartListener() => Task.Factory.StartNew(() => _nodeClient.StartListen());
 
